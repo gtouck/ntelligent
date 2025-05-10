@@ -3,7 +3,7 @@ import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import legacy from '@vitejs/plugin-legacy';
 import path from 'path';
-import config from './src/build/config';
+import config from './src/build/config.js';
 import postCssPxToRem from 'postcss-pxtorem';
 
 // https://vitejs.dev/config/
@@ -21,6 +21,7 @@ export default defineConfig(({ command, mode }) => {
     server: {
       port: 8001,
       open: true,
+
       proxy: {
         '/api': {
           target: 'http://139.224.198.235:8000',

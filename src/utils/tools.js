@@ -218,7 +218,7 @@ var tools = {
   initEcStat1(data) {
     let data1 = data.map(e => [moment(e.pc_time).format('YYYY-MM-DD'), e.speed_deviation]);
     let data2 = data.map(e => [e.speed_water, e.shaft_power_reference]);
-    console.log(data1)
+    console.log(data1);
     const chartDom = document.getElementById('chart5');
     chartDom.removeAttribute('_echarts_instance_');
     const myChart = echarts.init(chartDom);
@@ -296,8 +296,8 @@ var tools = {
       tooltip: {
         trigger: 'axis',
         axisPointer: {
-          type: 'cross'
-        }
+          type: 'cross',
+        },
       },
       series: [
         {
@@ -351,65 +351,65 @@ var tools = {
 
     option = {
       title: {
-        text: 'Stacked Line'
+        text: 'Stacked Line',
       },
       tooltip: {
-        trigger: 'axis'
+        trigger: 'axis',
       },
       legend: {
-        data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+        data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine'],
       },
       grid: {
         left: '3%',
         right: '4%',
         bottom: '3%',
-        containLabel: true
+        containLabel: true,
       },
       toolbox: {
         feature: {
-          saveAsImage: {}
-        }
+          saveAsImage: {},
+        },
       },
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       },
       yAxis: {
-        type: 'value'
+        type: 'value',
       },
       series: [
         {
           name: 'Email',
           type: 'line',
           stack: 'Total',
-          data: [120, 132, 101, 134, 90, 230, 210]
+          data: [120, 132, 101, 134, 90, 230, 210],
         },
         {
           name: 'Union Ads',
           type: 'line',
           stack: 'Total',
-          data: [220, 182, 191, 234, 290, 330, 310]
+          data: [220, 182, 191, 234, 290, 330, 310],
         },
         {
           name: 'Video Ads',
           type: 'line',
           stack: 'Total',
-          data: [150, 232, 201, 154, 190, 330, 410]
+          data: [150, 232, 201, 154, 190, 330, 410],
         },
         {
           name: 'Direct',
           type: 'line',
           stack: 'Total',
-          data: [320, 332, 301, 334, 390, 330, 320]
+          data: [320, 332, 301, 334, 390, 330, 320],
         },
         {
           name: 'Search Engine',
           type: 'line',
           stack: 'Total',
-          data: [820, 932, 901, 934, 1290, 1330, 1320]
-        }
-      ]
+          data: [820, 932, 901, 934, 1290, 1330, 1320],
+        },
+      ],
     };
     option && myChart.setOption(option);
   },

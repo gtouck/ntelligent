@@ -144,41 +144,10 @@ const initEchart = data => {
   const myChart = echarts.init(chartDom);
   let option;
   const nameArr = selectMapName.value.split('-');
-  echarts.registerTransform(ecStat.transform.regression);
+  const myRegression = ecStat.regression('polynomial', data, 2);
+
+  // echarts.registerTransform(ecStat.transform.regression);
   option = {
-    dataset: [
-      {
-        source: data,
-      },
-      // {
-      //   source: data1,
-      // },
-      {
-        transform: {
-          type: 'ecStat:regression',
-          fromDatasetIndex: 0,
-          print: true,
-          config: {
-            // order: 2,
-            method: 'polynomial',
-            // 'end' by default
-            formulaOn: 'start',
-          },
-        },
-      },
-      // {
-      //   transform: {
-      //     type: 'ecStat:regression',
-      //     fromDatasetIndex: 1,
-      //     print: true,
-      //     config: {
-      //       method: 'exponential',
-      //       // 'end' by default
-      //       // formulaOn: 'start'
-      //     },
-      //   },
-      // },
-    ],
     title: {},
     tooltip: {
       trigger: 'axis',
@@ -225,14 +194,6 @@ const initEchart = data => {
         },
         data: data,
       },
-      // {
-      //   type: 'scatter',
-      //   datasetIndex: 1,
-      //   itemStyle: {
-      //     color: '#20c563',
-      //   },
-      //   data: data1,
-      // },
       {
         type: 'line',
         smooth: false,
@@ -242,32 +203,8 @@ const initEchart = data => {
         lineStyle: {
           color: '#1a88ee',
         },
-        // label: {
-        //   show: true,
-        //   position: ['50%', '10%'], // 放在图表中间偏上的位置
-        //   formatter: function (params) {
-        //     return params.value[2]; // 第三个值是回归方程
-        //   },
-        //   // backgroundColor: 'rgba(255,255,255,0.7)',
-        //   padding: [4, 8],
-        //   borderRadius: 4,
-        //   distance: 10,
-        //   align: 'center',
-        //   fontSize: 14,
-        //   color: '#333',
-        // },
+        data: myRegression.points,
       },
-
-      // {
-      //   type: 'line',
-      //   smooth: true,
-      //   datasetIndex: 3,
-      //   symbolSize: 0.1,
-      //   symbol: 'circle',
-      //   lineStyle: {
-      //     color: '#20c563',
-      //   },
-      // },
     ],
     // 添加自定义图形元素用于显示公式
     graphic: [
@@ -277,7 +214,7 @@ const initEchart = data => {
         left: 'center',
         top: '5%',
         style: {
-          text: '回归方程将在数据加载后显示',
+          text: '回归方程: ' + myRegression.expression,
           fontSize: 14,
           fontFamily: 'Arial',
           fontWeight: 'normal',
@@ -291,30 +228,6 @@ const initEchart = data => {
   };
 
   option && myChart.setOption(option);
-  // 数据加载完成后，更新公式显示
-  myChart.on('rendered', function () {
-    // 获取回归数据中的公式
-    setTimeout(() => {
-      const seriesData = myChart.getOption().series[1].data;
-      if (seriesData && seriesData.length > 0) {
-        // 找到包含公式的数据点
-        const formulaPoint = seriesData.find(item => item[2] && typeof item[2] === 'string');
-        if (formulaPoint && formulaPoint[2]) {
-          console.log('公式', formulaPoint);
-          // 更新graphic元素显示公式
-          myChart.setOption({
-            graphic: [
-              {
-                style: {
-                  text: '回归方程: ' + formulaPoint[2],
-                },
-              },
-            ],
-          });
-        }
-      }
-    }, 500); // 给一点延时确保数据已加载
-  });
 };
 
 const delShip = index => {

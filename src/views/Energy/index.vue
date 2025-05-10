@@ -4,7 +4,10 @@
       <div class="search_left flex-row align-center">
         <p>油品种类</p>
         <el-select v-model="fuelType">
-          <el-option v-for="item in fuelTypeCategoryArr" :key="item.value" :label="item.label"
+          <el-option
+            v-for="item in fuelTypeCategoryArr"
+            :key="item.value"
+            :label="item.label"
             :value="item.value"></el-option>
         </el-select>
       </div>
@@ -16,24 +19,49 @@
         </el-select>
       </div>
       <div class="search-mid">
-        <div v-for="(item, index) in shipArr" :key="index" class="ship_box flex-row align-center">
+        <div
+          v-for="(item, index) in shipArr"
+          :key="index"
+          class="ship_box flex-row align-center">
           <p>船舶{{ index + 1 }}</p>
           <el-select v-model="item.ship">
-            <el-option v-for="v in data" :key="v.id" :label="v.name" :value="v.id"></el-option>
+            <el-option
+              v-for="v in data"
+              :key="v.id"
+              :label="v.name"
+              :value="v.id"></el-option>
           </el-select>
           <p class="lebal_text1">时间期间</p>
-          <el-date-picker clearable="false" v-model="item.startDate" value-format="YYYY-MM-DD" type="date"
-            placeholder="请选择" :size="size" />
+          <el-date-picker
+            clearable="false"
+            v-model="item.startDate"
+            value-format="YYYY-MM-DD"
+            type="date"
+            placeholder="请选择"
+            :size="size" />
           <p class="lebal_text2">-</p>
-          <el-date-picker v-model="item.endDate" value-format="YYYY-MM-DD" type="date" placeholder="请选择" :size="size" />
+          <el-date-picker
+            v-model="item.endDate"
+            value-format="YYYY-MM-DD"
+            type="date"
+            placeholder="请选择"
+            :size="size" />
 
-          <img class="close" src="@/assets/close.png" @click="delShip(index)" />
+          <img
+            class="close"
+            src="@/assets/close.png"
+            @click="delShip(index)" />
         </div>
       </div>
 
-      <img src="@/assets/addIcon.png" class="addIcon" @click="addShip" />
+      <img
+        src="@/assets/addIcon.png"
+        class="addIcon"
+        @click="addShip" />
 
-      <el-button class="btn_color search_btn" @click="getData">
+      <el-button
+        class="btn_color search_btn"
+        @click="getData">
         搜索
       </el-button>
       <el-button class="add_btn">
@@ -62,7 +90,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import * as echarts from 'echarts';
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus';
 import * as apis from '@/fetch/apis.js';
 import { useFuelTypeCategory } from '@/hooks/useCommon.js';
 const store = useStore();
@@ -77,14 +105,14 @@ const shipArr = ref([
   },
 ]);
 
-onMounted(() => { });
+onMounted(() => {});
 
 const getData = async () => {
-
-  if (new Date(shipArr.value[0].startDate).getTime() > new Date(shipArr.value[0].endDate).getTime()) {
-
-    ElMessage.error('开始时间不能大于结束时间')
-    return
+  if (
+    new Date(shipArr.value[0].startDate).getTime() > new Date(shipArr.value[0].endDate).getTime()
+  ) {
+    ElMessage.error('开始时间不能大于结束时间');
+    return;
   }
   let param = {
     fuel_type: fuelType.value,
@@ -133,7 +161,7 @@ const initBar = data => {
         axisLabel: {
           formatter: '{value}',
         },
-        name: `${energyType.value}(kg)`,
+        name: `${energyType.value}(吨)`,
         nameLocation: 'middle',
         nameRotate: '90',
         nameTextStyle: {

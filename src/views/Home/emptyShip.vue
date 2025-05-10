@@ -13,7 +13,9 @@
       通过利用船舶传感器收集的历史能效数据，帮助船公司了解船舶各类能效状况并获取节能增效建议
     </p>
     <div class="item_box">
-      <div v-for="item in funcData">
+      <div
+        v-for="item in funcData"
+        :key="item.title">
         <div>
           <span class="item_title">{{ item.title }}</span>
         </div>

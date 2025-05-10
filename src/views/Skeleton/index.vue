@@ -1,18 +1,25 @@
 <template>
   <div class="main_box">
-
     <Head />
     <div class="main_head flex-row align-center">
       <img src="@/assets/mainShip.png" />
       <p class="company_name">{{ companyInfo.name }}</p>
       <el-select v-model="selectShip">
-        <el-option v-for="item in shipArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
+        <el-option
+          v-for="item in shipArr"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"></el-option>
       </el-select>
     </div>
     <div class="container flex-row">
       <div class="container_left">
-        <div v-for="item in menuArr" :key="item.title" :class="{ active: currentPage == item.path }"
-          class="align-center flex-row" @click="toPage(item)">
+        <div
+          v-for="item in menuArr"
+          :key="item.title"
+          :class="{ active: currentPage == item.path }"
+          class="align-center flex-row"
+          @click="toPage(item)">
           <img :src="currentPage == item.path ? item.selectIcon : item.icon" />
           <span>{{ item.title }}</span>
         </div>

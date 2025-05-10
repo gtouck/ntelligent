@@ -1,25 +1,35 @@
 <template>
   <div class="statusRemind_box">
     <div class="box_head">
-      <el-tabs v-model="activeName" class="demo-tabs">
-        <el-tab-pane label="船体及螺旋桨状态" :name="0"></el-tab-pane>
-        <el-tab-pane label="发动机状态" :name="1"></el-tab-pane>
+      <el-tabs
+        v-model="activeName"
+        class="demo-tabs">
+        <el-tab-pane
+          label="船体及螺旋桨状态"
+          :name="0"></el-tab-pane>
+        <el-tab-pane
+          label="发动机状态"
+          :name="1"></el-tab-pane>
       </el-tabs>
-      <el-button class="add_btn" @click="capture">
+      <el-button
+        class="add_btn"
+        @click="capture">
         <img src="@/assets/export.png" />
         添加至报告
       </el-button>
     </div>
-    <div ref="Refcanvas" class="canvas_box">
+    <div
+      ref="Refcanvas"
+      class="canvas_box">
       <div class="box_content">
         <div class="content_left">
           <div class="title">
             <img src="@/assets/statusIcon.png" />
             <span>船体及螺旋桨脏污状态估计</span>
           </div>
-          <div class="bottom" v-if="activeName == 0">
-
-
+          <div
+            class="bottom"
+            v-if="activeName == 0">
             <div class="leftChart">
               <span>与出厂状态相比</span>
               <div id="chart3"></div>
@@ -30,14 +40,12 @@
             </div>
           </div>
 
-          <div class="bottom" v-if="activeName == 1">
-
+          <div
+            v-if="activeName == 1"
+            class="bottom">
             <span class="span1">与发动机大修完状态相比</span>
             <div id="chart1"></div>
-
           </div>
-
-
         </div>
         <div class="content_right">
           <div class="title">
@@ -68,11 +76,10 @@
 
 <script setup>
 import { ref, computed, onMounted, watch, nextTick } from 'vue';
-import { useStore } from 'vuex';
 
 import * as apis from '@/fetch/apis.js';
 
-import { } from '@/hooks/useCommon.js';
+import {} from '@/hooks/useCommon.js';
 import tools from '@/utils/tools';
 
 const Refcanvas = ref();
@@ -107,7 +114,6 @@ const reminderFigure = async () => {
     if (res.data.SpeedDeviation) {
       tools.initEcStat1(res.data.SpeedDeviation);
     }
-
   });
 };
 
