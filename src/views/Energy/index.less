@@ -1,0 +1,159 @@
+.energy {
+  padding: 34px 50px 66px;
+  .search_head {
+    padding-left: 6px;
+    position: relative;
+    // align-items: first baseline;
+    .search_left {
+      padding-top: 11px;
+      & > p {
+        font-family: SourceHanSansCN, SourceHanSansCN;
+        font-weight: 400;
+        font-size: 16px;
+        color: #333333;
+        margin-right: 16px;
+      }
+      .el-select {
+        width: 133px;
+      }
+    }
+    .ml26 {
+      margin-left: 26px;
+    }
+
+    .search-mid {
+      margin-left: 26px;
+      .ship_box {
+        background: #f7f9fc;
+        padding: 11px 39px 11px 23px;
+        position: relative;
+        margin-bottom: 10px;
+        & > p {
+          font-family: SourceHanSansCN, SourceHanSansCN;
+          font-weight: 400;
+          font-size: 16px;
+          color: #333333;
+          margin-right: 12px;
+        }
+        .el-select {
+          width: 150px;
+        }
+        .lebal_text1 {
+          margin-left: 36px;
+        }
+        .lebal_text2 {
+          margin-left: 12px;
+        }
+        .lebal_text3 {
+          margin-left: 23px;
+        }
+        :deep(.el-input__wrapper),
+        :deep(.el-input) {
+          width: 150px;
+          height: 42px;
+          background: #ffffff;
+          border-radius: 5px;
+          justify-content: flex-start;
+        }
+        .close {
+          position: absolute;
+          top: 0;
+          right: 0;
+          height: 16px;
+          width: 16px;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .addIcon {
+      height: 20px;
+      width: 20px;
+      margin: 22px 24px 0 26px;
+    }
+
+    .search_btn {
+      width: 88px;
+      height: 42px;
+      border-radius: 5px;
+
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: 400;
+      font-size: 16px;
+      color: #ffffff;
+      margin-right: 65px;
+      margin-top: 11px;
+    }
+    .add_btn {
+      position: absolute;
+      right: 0;
+      width: 124px;
+      height: 42px;
+      border-radius: 5px;
+      border: 1px solid rgba(18, 134, 241, 0.55);
+      margin-top: 11px;
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: 400;
+      font-size: 15px;
+      color: #1286f1;
+      line-height: 23px;
+      text-align: center;
+      font-style: normal;
+      img {
+        height: 18px;
+
+        object-fit: contain;
+        margin-right: 7px;
+      }
+    }
+  }
+
+  .data_box {
+    margin-top: 57px;
+    .data_head {
+      width: 100%;
+      margin-bottom: 22px;
+      .head_left {
+        div {
+          width: 30px;
+          height: 30px;
+
+          margin-right: 12px;
+          border-radius: 100%;
+          img {
+            height: 30px;
+            width: 30px;
+          }
+        }
+
+        span {
+          font-family: SourceHanSansCN, SourceHanSansCN;
+          font-weight: bold;
+          font-size: 17px;
+          color: #333333;
+        }
+      }
+    }
+  }
+  :deep(.el-select) {
+    height: 42px;
+    border-radius: 5px;
+    border: 1px solid #e2e2e2;
+  }
+  :deep(.el-select__wrapper) {
+    height: 100%;
+  }
+
+  :deep(.el-input__prefix) {
+    position: absolute;
+    right: 9px;
+  }
+  .echart_box {
+    height: 500px;
+    width: 100%;
+    #myBar {
+      height: 100%;
+      width: 100%;
+    }
+  }
+}

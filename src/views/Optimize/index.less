@@ -1,0 +1,239 @@
+.optimize_box {
+  padding: 12px 50px;
+  .demo-tabs {
+    :deep(.el-tabs__item) {
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: 400;
+      font-size: 16px;
+      color: #999999;
+
+      text-align: center;
+      font-style: normal;
+      height: 64px;
+      margin-right: 40px;
+    }
+    :deep(.el-tabs__active-bar) {
+      height: 3px;
+      background: #1286f1;
+    }
+    :deep(.is-active) {
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: bold;
+      font-size: 18px;
+      color: #333;
+      line-height: 27px;
+      text-align: center;
+      font-style: normal;
+    }
+  }
+
+  .search_box {
+    width: 100%;
+    margin: 30px 0 45px;
+    position: relative;
+    .lebal_text {
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: 400;
+      font-size: 16px;
+      color: #333333;
+      line-height: 24px;
+      text-align: center;
+      font-style: normal;
+      margin: 0 12px;
+    }
+    .ml_35 {
+      margin-left: 35px;
+    }
+    :deep(.el-input__wrapper),
+    :deep(.el-input) {
+      width: 150px;
+      height: 42px;
+      background: #ffffff;
+      border-radius: 5px;
+      justify-content: flex-start;
+    }
+    .el-select {
+      width: 150px;
+      height: 42px;
+      background: #ffffff;
+      border-radius: 5px;
+    }
+    :deep(.el-select__wrapper) {
+      height: 42px;
+    }
+    :deep(.el-input__prefix) {
+      position: absolute;
+      right: 9px;
+    }
+    .btn_color {
+      margin-left: 18px;
+      width: 88px;
+      height: 42px;
+      border-radius: 5px;
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: 400;
+      font-size: 16px;
+      color: #ffffff;
+      cursor: pointer;
+      line-height: 42px;
+      text-align: center;
+    }
+  }
+
+  .result_box {
+    padding-left: 70px;
+    background-image: url(../../assets/resultbg.png);
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-position: left top;
+    height: 83px;
+    margin-bottom: 42px;
+    & > div {
+      display: flex;
+      align-items: center;
+      .lebal {
+        font-family: MicrosoftYaHei;
+        font-size: 15px;
+        color: #333333;
+        margin-right: 16px;
+      }
+      .value {
+        font-family: MicrosoftYaHeiBold;
+        font-size: 20px;
+        color: #333333;
+      }
+      .FontAdd {
+        font-size: 15px;
+      }
+      & > div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 51px;
+        height: 51px;
+        background: rgba(32, 197, 99, 0.08);
+        border-radius: 100%;
+      }
+
+      .colorVlue {
+        width: 41px;
+        height: 41px;
+        background: rgba(32, 197, 99, 0.48);
+        border-radius: 100%;
+
+        font-family: MicrosoftYaHeiBold;
+        font-size: 20px;
+        color: #0d0d0d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    .line {
+      width: 1px;
+      height: 20px;
+      border: 1px solid #e2e2e2;
+      margin: 0 60px;
+    }
+  }
+
+  .data_box {
+    .data_head {
+      width: 100%;
+      margin-bottom: 22px;
+      .head_left {
+        div {
+          width: 30px;
+          height: 30px;
+
+          margin-right: 12px;
+          border-radius: 100%;
+          img {
+            height: 30px;
+            width: 30px;
+          }
+        }
+
+        span {
+          font-family: SourceHanSansCN, SourceHanSansCN;
+          font-weight: bold;
+          font-size: 17px;
+          color: #333333;
+        }
+      }
+      .head_right {
+        div {
+          width: 33px;
+          height: 29px;
+          background: #f7f7fb;
+          border: 1px solid #e5e5e5;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-left: 8px;
+          img {
+            height: 17px;
+            object-fit: contain;
+          }
+        }
+        .active {
+          background: #e0f0ff;
+          border: 1px solid #1286f1;
+        }
+      }
+    }
+    .green {
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: bold;
+      font-size: 16px;
+      color: #20c563;
+    }
+    .black {
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: bold;
+      font-size: 16px;
+      color: #787878;
+    }
+    .red {
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: bold;
+      font-size: 16px;
+      color: #dc4c3f;
+    }
+    #chart1 {
+      width: 100%;
+      height: 500px;
+    }
+  }
+
+  .add_btn {
+    width: 124px;
+    height: 42px;
+    border-radius: 5px;
+    border: 1px solid rgba(18, 134, 241, 0.55);
+    position: absolute;
+    font-family: SourceHanSansCN, SourceHanSansCN;
+    font-weight: 400;
+    font-size: 15px;
+    color: #1286f1;
+    line-height: 23px;
+    text-align: center;
+    font-style: normal;
+    right: 0;
+    img {
+      height: 18px;
+
+      object-fit: contain;
+      margin-right: 7px;
+    }
+  }
+}
+
+:deep(thead .el-table__cell) {
+  height: 40px;
+  background: #e7edf2;
+  font-family: SourceHanSansCN, SourceHanSansCN;
+  font-weight: 400;
+  font-size: 15px;
+  color: #4c5a6a;
+}

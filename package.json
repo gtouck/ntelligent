@@ -1,0 +1,86 @@
+{
+  "name": "yb-student",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --mode dev",
+    "uat": "vite --mode uat",
+    "prod": "vite --mode prod",
+    "build": "vite build ",
+    "build:uat": "vite build --mode uat",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "amfe-flexible": "^2.2.1",
+    "axios": "^1.6.7",
+    "echarts": "^5.5.1",
+    "echarts-stat": "^1.2.0",
+    "element-plus": "^2.7.7",
+    "html2canvas": "^1.4.1",
+    "moment": "^2.30.1",
+    "terser": "^5.27.0",
+    "vue": "^3.4.15",
+    "vue-i18n": "^9.13.1",
+    "vuex-persistedstate": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-legacy": "^5.3.0",
+    "@vitejs/plugin-vue": "^4.5.2",
+    "clean-webpack-plugin": "^4.0.0",
+    "eslint": "^8.24.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-vue": "^9.5.1",
+    "less": "^4.2.0",
+    "postcss-pxtorem": "^5.1.1",
+    "prettier": "^2.7.1",
+    "qs": "^6.11.2",
+    "unplugin-auto-import": "^0.17.5",
+    "vite": "^5.0.8",
+    "vue-router": "^4.2.5",
+    "vuex": "^4.0.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true,
+      "browser": true,
+      "es6": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:vue/recommended",
+      "plugin:prettier/recommended",
+      "prettier"
+    ],
+    "rules": {
+      "prefer-const": "off",
+      "no-unused-vars": "off",
+      "no-use-before-define": "off",
+      "no-empty": "off",
+      "vue/multi-word-component-names": "off",
+      "no-constant-condition": "off",
+      "vue/no-multiple-template-root": "off",
+      "vue/component-definition-name-casing": "off",
+      "vue/no-unused-vars": "off",
+      "vue/no-unused-components": "off",
+      "vue/no-v-model-argument": "off",
+      "vue/no-mutating-props": "off"
+    }
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "printWidth": 100,
+    "semi": true,
+    "singleQuote": true,
+    "jsxSingleQuote": true,
+    "bracketSpacing": true,
+    "bracketSameLine": true,
+    "singleAttributePerLine": true,
+    "arrowParens": "avoid",
+    "trailingComma": "all",
+    "htmlWhitespaceSensitivity": "ignore"
+  }
+}

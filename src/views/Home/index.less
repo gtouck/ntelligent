@@ -1,0 +1,678 @@
+.home-page {
+  background: #f7f9fc;
+  height: 100vh;
+  overflow: auto;
+
+  .container {
+    width: 100%;
+    padding: 0 124px 62px 124px;
+    background-image: url(../../assets/homeBg.png);
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-position: left top;
+  }
+
+  .title_box {
+    margin: 0px 0 35px 14px;
+    padding-top: 58px;
+
+    .home_title {
+      font-family: DingTalk, DingTalk;
+      font-weight: normal;
+      font-size: 44px;
+      color: #2961a3;
+
+      text-align: justify;
+      margin-bottom: 24px;
+    }
+
+    .info_box {
+      display: flex;
+      height: 48px;
+      padding: 0 9px 0 16px;
+      background: linear-gradient(270deg, rgba(138, 208, 255, 0.16) 0%, #deeffe 100%);
+      border-radius: 24px;
+      align-items: center;
+      justify-content: space-between;
+      width: max-content;
+
+      &>div {
+        display: flex;
+        align-items: center;
+        margin-right: 46px;
+
+        img {
+          height: 20px;
+          object-fit: contain;
+          margin-right: 11px;
+        }
+
+        span {
+          font-family: SourceHanSansCN, SourceHanSansCN;
+          font-weight: 400;
+          font-size: 16px;
+          color: #576574;
+          line-height: 24px;
+          text-align: justify;
+        }
+      }
+    }
+  }
+
+  .empty_box {
+    padding: 40px 45px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.93) 19%,
+        #ffffff 100%);
+    border-radius: 20px;
+
+    // border: 1px solid #ffffff;
+    .empty_text {
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: 400;
+      font-size: 40px;
+      color: #cccccc;
+      line-height: 60px;
+      text-align: justify;
+      margin-bottom: 43px;
+    }
+
+    .add_btn {
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: 400;
+      font-size: 20px;
+      color: #ffffff;
+      line-height: 30px;
+      text-align: justify;
+      font-style: normal;
+      width: 267px;
+      height: 60px;
+      margin-bottom: 87px;
+    }
+
+    .introduce {
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: bold;
+      font-size: 22px;
+      color: #333333;
+      line-height: 33px;
+      margin-bottom: 17px;
+    }
+
+    .line {
+      width: 80px;
+      height: 5px;
+      background: #1369c1;
+      margin-bottom: 24px;
+    }
+
+    .introduce1 {
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: 400;
+      font-size: 18px;
+      color: #666666;
+      line-height: 27px;
+    }
+  }
+
+  .item_box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 42px;
+
+    &>div {
+      width: 300px;
+      height: 242px;
+      border-radius: 15px;
+      padding: 28px 31px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-position: left top;
+
+      &>div {
+        display: flex;
+        align-items: center;
+        margin-bottom: 11px;
+
+        img {
+          width: 40px;
+          height: 40px;
+          background: #ffffff;
+          box-shadow: 3px 4px 12px 0px rgba(213, 177, 240, 0.46);
+          margin-right: 18px;
+        }
+
+        span {
+          font-family: SourceHanSansCN, SourceHanSansCN;
+          font-weight: bold;
+          font-size: 20px;
+
+          padding-left: 58px;
+        }
+      }
+
+      &>span {
+        font-family: SourceHanSansCN, SourceHanSansCN;
+        font-weight: 400;
+        font-size: 16px;
+        color: #576574;
+        line-height: 24px;
+        display: inline-block;
+        margin-top: 22px;
+      }
+    }
+
+    &>div:nth-child(1) {
+      background-image: url(../../assets/bg1.png);
+
+      .item_title {
+        color: #904cc0;
+      }
+    }
+
+    &>div:nth-child(2) {
+      background-image: url(../../assets/bg2.png);
+
+      .item_title {
+        color: #ed8b29;
+      }
+    }
+
+    &>div:nth-child(3) {
+      background-image: url(../../assets/bg3.png);
+
+      .item_title {
+        color: #1369c1;
+      }
+    }
+
+    &>div:nth-child(4) {
+      background-image: url(../../assets/bg4.png);
+
+      .item_title {
+        color: #ce3838;
+      }
+    }
+
+    &>div:nth-child(5) {
+      background-image: url(../../assets/bg5.png);
+
+      .item_title {
+        color: #429839;
+      }
+    }
+  }
+}
+
+.search_box {
+  width: 100%;
+
+  .left_box {
+    &>p {
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: 400;
+      font-size: 16px;
+      color: #333333;
+
+      span {
+        color: #1286f1;
+      }
+    }
+
+    &>div {
+      cursor: pointer;
+      margin-left: 22px;
+      width: 68px;
+      height: 32px;
+      border-radius: 5px;
+      border: 1px solid #b4c3d3;
+
+      &>span {
+        font-family: SourceHanSansCN, SourceHanSansCN;
+        font-weight: 400;
+        font-size: 14px;
+        color: #333333;
+
+        text-align: justify;
+      }
+
+      img {
+        width: 11px;
+        height: 14px;
+        margin-left: 6px;
+      }
+
+      .sort {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .right_box {
+    .el-input {
+      width: 454px;
+      height: 43px;
+      background: rgba(255, 255, 255, 0.53);
+      border-radius: 5px;
+      margin-right: 40px;
+
+      input {
+        font-family: PingFangSC, PingFang SC;
+        font-weight: 400;
+        font-size: 14px !important;
+        color: #c6c6c6;
+      }
+    }
+
+    .el-button {
+      padding: 0 27px;
+      height: 43px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 5px;
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: 400;
+      font-size: 16px;
+      color: #1286f1;
+    }
+
+    .search {
+      height: 25px;
+      object-fit: contain;
+      margin-left: -25px;
+    }
+
+    .upload,
+    .add {
+      height: 13px;
+      object-fit: contain;
+    }
+
+    :deep(.el-input__wrapper) {
+      justify-content: flex-start;
+    }
+  }
+}
+
+.ship_item {
+  width: 100%;
+  margin-top: 44px;
+  margin-bottom: 22px;
+
+  .item_head {
+    margin-bottom: 30px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .ship_items {
+      display: flex;
+      align-items: center;
+      // flex: 1;
+      overflow: auto;
+      //scrollbar-width: none;
+      /* Firefox 隐藏滚动条 */
+      -ms-overflow-style: none;
+      /* IE 和 Edge 隐藏滚动条 */
+    }
+
+    .ship_items::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* 滚动条整体样式 */
+    ::-webkit-scrollbar {
+      width: 12px;
+      /* 垂直滚动条宽度 */
+      height: 8px;
+      /* 水平滚动条高度 */
+    }
+
+    /* 滚动条轨道 */
+    ::-webkit-scrollbar-track {
+      background: rgba(1, 1, 1, 0);
+      /* 轨道背景色 */
+      border-radius: 10px;
+      /* 圆角 */
+    }
+
+    /* 滚动条滑块 */
+    ::-webkit-scrollbar-thumb {
+      background: #1286f1;
+      /* 滑块背景色 */
+      border-radius: 10px;
+      /* 圆角 */
+      border: 3px solid #f1f1f1;
+      /* 滑块边框 */
+    }
+
+    /* 滚动条滑块悬停效果 */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #1286f1;
+      /* 悬停时滑块背景色 */
+    }
+
+    .head_left {
+      border-radius: 30px;
+      border: 1px solid #cecece;
+      padding: 14px 38px 14px 15px;
+      cursor: pointer;
+
+      img {
+        height: 31px;
+        object-fit: contain;
+        margin-right: 12px;
+      }
+
+      span {
+        font-family: SourceHanSansCN, SourceHanSansCN;
+        font-weight: bold;
+        font-size: 22px;
+        color: #333333;
+      }
+    }
+
+    .head_right {
+      display: flex;
+      justify-content: flex-end;
+      width: 40%;
+      flex-shrink: 0;
+
+      .el-button {
+        border-radius: 5px;
+        border: 1px solid #cae5ff;
+        padding: 0 20px;
+        height: 40px;
+        font-family: SourceHanSansCN, SourceHanSansCN;
+        font-weight: 400;
+        font-size: 16px;
+        color: #1286f1;
+
+        img {
+          height: 14px;
+          object-fit: contain;
+          margin-right: 6px;
+        }
+      }
+    }
+  }
+
+  .item_content {
+    .content_left {
+      width: 509px;
+      height: 115px;
+      border-radius: 10px;
+
+      &>div {
+        margin-left: 25px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex: 1;
+
+        .el-icon {
+          margin-left: 8px;
+        }
+
+        &>div {
+          margin-bottom: 15px;
+          font-family: SourceHanSansCN, SourceHanSansCN;
+          font-weight: bold;
+          font-size: 20px;
+          color: #20c563;
+        }
+
+        &>span {
+          font-family: SourceHanSansCN, SourceHanSansCN;
+          font-weight: 400;
+          font-size: 16px;
+          color: #576574;
+          line-height: 24px;
+        }
+
+        .warn {
+          color: #ffb539;
+        }
+
+        .error {
+          color: #ff5f5f;
+        }
+      }
+
+      .line {
+        flex-shrink: 0;
+        width: 1px;
+        height: 29px;
+        border: 1px solid #e7e7e7;
+      }
+    }
+
+    .content_box {
+      width: 245px;
+      height: 115px;
+      background: #f4f8fe;
+      border-radius: 10px;
+      padding-left: 24px;
+
+      &>p {
+        font-family: SourceHanSansCN, SourceHanSansCN;
+        font-weight: bold;
+        font-size: 24px;
+        color: #000000;
+        line-height: 36px;
+        margin-bottom: 16px;
+
+        span {
+          font-family: SourceHanSansCN, SourceHanSansCN;
+          font-weight: 400;
+          font-size: 14px;
+          color: #576574;
+          line-height: 21px;
+        }
+      }
+
+      &>span {
+        font-family: SourceHanSansCN, SourceHanSansCN;
+        font-weight: 400;
+        font-size: 16px;
+        color: #576574;
+        line-height: 24px;
+      }
+    }
+
+    .data1 {
+      background: url('../../assets/data1.png') no-repeat;
+      background-size: 100% 100%;
+    }
+
+    .data2 {
+      background: url('../../assets/data2.png') no-repeat;
+      background-size: 100% 100%;
+    }
+
+    .data3 {
+      background: url('../../assets/data3.png') no-repeat;
+      background-size: 100% 100%;
+    }
+
+    .data4 {
+      background: url('../../assets/data4.png') no-repeat;
+      background-size: 100% 100%;
+    }
+
+    .data5 {
+      background: url('../../assets/data5.png') no-repeat;
+      background-size: 100% 100%;
+    }
+  }
+
+  .item_btm {
+    width: 100%;
+    margin-top: 38px;
+
+    .btm_right {
+      .el-button {
+        border-radius: 5px;
+        border: 1px solid #cae5ff;
+        padding: 0 27px;
+        height: 40px;
+        font-family: SourceHanSansCN, SourceHanSansCN;
+        font-weight: 400;
+        font-size: 16px;
+        color: #1286f1;
+
+        img {
+          height: 14px;
+          object-fit: contain;
+          margin-right: 6px;
+        }
+      }
+    }
+  }
+
+  #chartBox {
+    width: 100%;
+    height: 500px;
+  }
+}
+
+.pagination_bx {
+  margin-top: 29px;
+
+  :deep(.el-pager) {
+    li {
+      width: 38px;
+      height: 38px;
+      background: #f4f8fd;
+      border-radius: 3px;
+      border: 1px solid #dfdfdf;
+      font-family: MicrosoftYaHei;
+      font-size: 12px;
+      color: #333333;
+      margin-right: 8px;
+    }
+
+    .is-active {}
+  }
+
+  .el-icon {
+    font-size: 12px;
+    margin: 0 13px;
+  }
+
+  .total_box {
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+    color: #757575;
+
+    .el-input {
+      width: 45px;
+      height: 38px;
+      border-radius: 3px;
+      border: 1px solid #dfdfdf;
+      margin: 0 8px;
+    }
+
+    .el-button {
+      width: 68px;
+      height: 38px;
+      background: #ffffff;
+      border-radius: 3px;
+      border: 1px solid #dfdfdf;
+      margin-left: 8px;
+    }
+  }
+}
+
+:deep(.el-input__wrapper) {
+  width: 100%;
+}
+
+.have_ship {
+  padding: 22px 60px 53px !important;
+}
+
+#littleShip {
+  .head_left {
+    margin-right: 20px;
+
+    border-radius: 30px;
+    border: 1px solid #cecece;
+    // padding-right: 10px;
+    cursor: pointer;
+
+    span {
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: 400;
+      font-size: 22px;
+      color: #999999;
+      line-height: 33px;
+    }
+
+    .el-icon {
+      font-size: 19px;
+      color: #d4d4d4;
+      margin-left: 35px;
+    }
+  }
+
+  .head_add {
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    border: 1px solid #cecece;
+    cursor: pointer;
+
+    .el-icon {
+      font-size: 20px;
+      color: #1286f1;
+    }
+  }
+
+  .active_head {
+    background: linear-gradient(123deg, #0e4e9a 0%, #1c94ff 100%);
+    box-shadow: 0px 5px 10px 0px rgba(126, 194, 255, 0.71);
+
+    span {
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: bold;
+      font-size: 22px;
+      color: #ffffff;
+      line-height: 33px;
+      text-align: justify;
+      font-style: normal;
+    }
+
+    .el-icon {
+      font-size: 19px;
+      color: #fff;
+      margin-left: 35px;
+    }
+  }
+
+  .btm_left {
+    img {
+      height: 31px;
+      object-fit: contain;
+      margin-right: 20px;
+    }
+
+    span {
+      font-family: SourceHanSansCN, SourceHanSansCN;
+      font-weight: bold;
+      font-size: 18px;
+      color: #333333;
+    }
+  }
+
+  :deep(.el-select__selection.is-near) {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+}

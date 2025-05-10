@@ -1,0 +1,118 @@
+.register-page {
+  background: #f7f9fc;
+  height: 100vh;
+  overflow: auto;
+
+  .container {
+    width: 100%;
+    padding: 39px 46px 62px 46px;
+    background-image: url(../../assets/mainbg.png);
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-position: left top;
+
+    .back_box {
+      width: 100%;
+      img {
+        height: 25px;
+        object-fit: contain;
+        margin-right: 8px;
+        cursor: pointer;
+      }
+      p {
+        font-family: SourceHanSansCN, SourceHanSansCN;
+        font-weight: bold;
+        font-size: 24px;
+        color: #333333;
+        line-height: 36px;
+        text-align: justify;
+        font-style: normal;
+      }
+    }
+
+    .form_box {
+      width: 100%;
+      padding: 70px;
+      background: #ffffff;
+      border-radius: 15px;
+      margin-top: 46px;
+      .el-form-item {
+        margin-bottom: 0;
+      }
+      .el-input {
+        width: 420px;
+        height: 40px;
+        background: #ffffff;
+        border-radius: 5px;
+        border: 1px solid #e2e2e2;
+        margin-bottom: 23px;
+        input {
+          width: auto !important;
+        }
+      }
+      .el-select {
+        width: 420px;
+        height: 40px;
+        background: #ffffff;
+        border-radius: 5px;
+        border: 1px solid #e2e2e2;
+        margin-bottom: 23px;
+      }
+      :deep(.el-select__wrapper) {
+        width: 420px;
+        height: 40px;
+        background: #ffffff;
+        border-radius: 5px;
+
+        margin-bottom: 23px;
+      }
+    }
+  }
+
+  :deep(.el-form-item__label) {
+    font-family: SourceHanSansCN, SourceHanSansCN;
+    font-weight: 400;
+    font-size: 16px;
+    color: #333333;
+    line-height: 24px;
+    text-align: justify;
+    font-style: normal;
+  }
+  :deep(.el-input__inner) {
+    width: auto;
+  }
+
+  .text_name {
+    font-family: SourceHanSansCN, SourceHanSansCN;
+    font-weight: 400;
+    font-size: 14px;
+    color: #999999;
+    line-height: 21px;
+    text-align: justify;
+    font-style: normal;
+    cursor: pointer;
+    span {
+      color: #1286f1;
+    }
+  }
+
+  .btn {
+    width: 420px;
+    height: 47px;
+
+    border-radius: 5px;
+    font-family: SourceHanSansCN, SourceHanSansCN;
+    font-weight: 400;
+    font-size: 16px;
+    color: #ffffff;
+    font-style: normal;
+    text-align: center;
+    line-height: 47px;
+    margin-top: 55px;
+  }
+
+  :deep(.el-form-item__error) {
+    bottom: 0;
+    top: auto;
+  }
+}
