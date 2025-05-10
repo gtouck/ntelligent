@@ -14,8 +14,8 @@
       <div class="search_left flex-row align-center ml26">
         <p>能耗种类</p>
         <el-select v-model="energyType">
-          <el-option value="每海里油耗">每海里油耗</el-option>
           <el-option value="总油耗">总油耗</el-option>
+          <el-option value="每海里油耗">每海里油耗</el-option>
         </el-select>
       </div>
       <div class="search-mid">

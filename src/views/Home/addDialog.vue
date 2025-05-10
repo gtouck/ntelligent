@@ -1,8 +1,14 @@
 <template>
-  <el-drawer v-model="dialogFormVisible" :show-close="false" size="60%" custom-class="addShipping">
+  <el-drawer
+    v-model="dialogFormVisible"
+    :show-close="false"
+    size="60%"
+    custom-class="addShipping">
     <template #header="{ close, titleId, titleClass }">
       <div class="my-header">
-        <p :id="titleId" :class="titleClass">
+        <p
+          :id="titleId"
+          :class="titleClass">
           新增船舶
         </p>
 
@@ -12,42 +18,91 @@
       </div>
     </template>
 
-    <el-form ref="ruleFormRef" :model="form" :rules="postVesselRule" label-position="top">
-      <el-form-item label="船舶IMO">
-        <el-input v-model="form.info.mmsi" autocomplete="off" />
+    <el-form
+      ref="ruleFormRef"
+      :model="form"
+      :rules="postVesselRule"
+      label-position="top">
+      <el-form-item
+        label="船舶IMO"
+        prop="info.mmsi">
+        <el-input
+          v-model="form.info.mmsi"
+          autocomplete="off" />
       </el-form-item>
-      <el-form-item label="船舶名">
-        <el-input v-model="form.info.name" autocomplete="off" />
+      <el-form-item
+        label="船舶名"
+        prop="info.name">
+        <el-input
+          v-model="form.info.name"
+          autocomplete="off" />
       </el-form-item>
-      <el-form-item label="船舶类型">
-        <el-select v-model="form.info.ship_type" placeholder="请选择">
-          <el-option v-for="item in shipTypeArr" :key="item.id" :label="item.name" :value="item.id" />
+      <el-form-item
+        label="船舶类型"
+        prop="info.ship_type">
+        <el-select
+          v-model="form.info.ship_type"
+          placeholder="请选择">
+          <el-option
+            v-for="item in shipTypeArr"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id" />
         </el-select>
       </el-form-item>
-      <el-form-item label="建造年份">
-        <el-date-picker v-model="form.info.build_date" value-format="YYYY-MM-DD" class="date_picker" type="date"
+      <el-form-item
+        label="建造年份"
+        prop="info.build_date">
+        <el-date-picker
+          v-model="form.info.build_date"
+          value-format="YYYY-MM-DD"
+          class="date_picker"
+          type="date"
           placeholder="请选择" />
       </el-form-item>
-      <el-form-item label="总吨">
-        <el-input type="number" v-model="form.info.gross_tone" autocomplete="off" />
+      <el-form-item
+        label="总吨"
+        prop="info.gross_tone">
+        <el-input
+          type="number"
+          v-model="form.info.gross_tone"
+          autocomplete="off" />
       </el-form-item>
-      <el-form-item label="载重吨">
-        <el-input type="number" v-model="form.info.dead_weight" autocomplete="off" />
+      <el-form-item
+        label="载重吨"
+        prop="info.dead_weight">
+        <el-input
+          type="number"
+          v-model="form.info.dead_weight"
+          autocomplete="off" />
       </el-form-item>
       <el-form-item label="船用时区">
-        <el-select v-model="form.info.time_zone" placeholder="请选择">
-          <el-option v-for="item in timeZoneArr" :key="item.id" :label="item.name" :value="item.id" />
+        <el-select
+          v-model="form.info.time_zone"
+          placeholder="请选择">
+          <el-option
+            v-for="item in timeZoneArr"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="螺距">
-        <el-input type="number" v-model="form.info.pitch" autocomplete="off" />
+        <el-input
+          type="number"
+          v-model="form.info.pitch"
+          autocomplete="off" />
       </el-form-item>
       <el-form-item label="新造船">
         <el-radio-group v-model="form.info.new_vessel">
-          <el-radio :value="true" size="large">
+          <el-radio
+            :value="true"
+            size="large">
             是
           </el-radio>
-          <el-radio :value="false" size="large">
+          <el-radio
+            :value="false"
+            size="large">
             否
           </el-radio>
         </el-radio-group>
@@ -58,76 +113,140 @@
       </el-form-item> -->
 
       <el-form-item label="发动机大修日期">
-        <el-date-picker v-model="form.info.engine_overhaul_date" class="date_picker" value-format="YYYY-MM-DD"
-          type="date" placeholder="请选择" />
+        <el-date-picker
+          v-model="form.info.engine_overhaul_date"
+          class="date_picker"
+          value-format="YYYY-MM-DD"
+          type="date"
+          placeholder="请选择" />
       </el-form-item>
       <el-form-item label="船体重喷漆日期">
-        <el-date-picker v-model="form.info.newly_paint_date" class="date_picker" value-format="YYYY-MM-DD" type="date"
+        <el-date-picker
+          v-model="form.info.newly_paint_date"
+          class="date_picker"
+          value-format="YYYY-MM-DD"
+          type="date"
           placeholder="请选择" />
       </el-form-item>
       <el-form-item label="上次船体清洁日期">
-        <el-date-picker v-model="form.info.hull_clean_date" class="date_picker" value-format="YYYY-MM-DD" type="date"
+        <el-date-picker
+          v-model="form.info.hull_clean_date"
+          class="date_picker"
+          value-format="YYYY-MM-DD"
+          type="date"
           placeholder="请选择" />
       </el-form-item>
       <el-form-item label="上次螺旋桨抛光日期">
         <!-- 接口没有这个字段 -->
-        <el-date-picker v-model="form.info.propeller_polish_date" class="date_picker" value-format="YYYY-MM-DD"
-          type="date" placeholder="请选择" />
+        <el-date-picker
+          v-model="form.info.propeller_polish_date"
+          class="date_picker"
+          value-format="YYYY-MM-DD"
+          type="date"
+          placeholder="请选择" />
       </el-form-item>
       <div class="item_box mt35">
-        <p class="trialVoyage_head">试航报告对水航速与主机功率数值<img src="@/assets/addIcon.png"
-            @click="() => addDevice('power_speed_curve')" /></p>
-        <div v-for="(item, itemIndex) in form.info.power_speed_curve" class="curve_item">
+        <p class="trialVoyage_head">
+          试航报告对水航速与主机功率数值
+          <img
+            src="@/assets/addIcon.png"
+            @click="() => addDevice('power_speed_curve')" />
+        </p>
+        <div
+          v-for="(item, itemIndex) in form.info.power_speed_curve"
+          class="curve_item">
           <div class="item_box mt0">
             <el-form-item label="船首吃水">
-              <el-input v-model="item.draft_bow" autocomplete="off" />
+              <el-input
+                v-model="item.draft_bow"
+                autocomplete="off" />
             </el-form-item>
             <el-form-item label="船尾吃水">
-              <el-input v-model="item.draft_astern" autocomplete="off" />
+              <el-input
+                v-model="item.draft_astern"
+                autocomplete="off" />
             </el-form-item>
             <el-form-item label="曲线名称">
-              <el-input v-model="item.curve_name" autocomplete="off" />
+              <el-input
+                v-model="item.curve_name"
+                autocomplete="off" />
             </el-form-item>
           </div>
-          <div class="item_box mt0" v-for="(i, index) in item.curve_data" :key="index">
+          <div
+            class="item_box mt0"
+            v-for="(i, index) in item.curve_data"
+            :key="index">
             <el-form-item label="对水航速">
-              <el-input v-model="i.speed_water" autocomplete="off" />
+              <el-input
+                v-model="i.speed_water"
+                autocomplete="off" />
             </el-form-item>
             <el-form-item label="主机功率">
-              <el-input v-model="i.me_power" autocomplete="off" />
+              <el-input
+                v-model="i.me_power"
+                autocomplete="off" />
             </el-form-item>
             <div class="space">
-              <img src="@/assets/iconDel.png" @click="delDevice(itemIndex, 'curve_data', index)" />
-              <img v-if="index == item.curve_data.length - 1" src="@/assets/addIcon.png"
+              <img
+                src="@/assets/iconDel.png"
+                @click="delDevice(itemIndex, 'curve_data', index)" />
+              <img
+                v-if="index == item.curve_data.length - 1"
+                src="@/assets/addIcon.png"
                 @click="() => addDevice('curve_data', itemIndex)" />
             </div>
-
           </div>
         </div>
 
         <div class="bg_box"></div>
       </div>
 
-      <div v-for="(item, index) in form.info.equipment_fuel" :key="index" class="item_box">
+      <div
+        v-for="(item, index) in form.info.equipment_fuel"
+        :key="index"
+        class="item_box">
         <div class="flex-row align-center w-300 justify-between">
           <el-form-item label="设备种类">
-            <el-select v-model="item.type" filterable allow-create placeholder="请选择" class="w-111">
-              <el-option v-for="item in deviceTypeArr" :key="item.id" :label="item.name" :value="item.id" />
+            <el-select
+              v-model="item.type"
+              filterable
+              allow-create
+              placeholder="请选择"
+              class="w-111">
+              <el-option
+                v-for="item in deviceTypeArr"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id" />
             </el-select>
           </el-form-item>
           <el-form-item label="设备名称">
-            <el-input v-model="item.name" class="w-164" placeholder="请输入"></el-input>
+            <el-input
+              v-model="item.name"
+              class="w-164"
+              placeholder="请输入"></el-input>
           </el-form-item>
         </div>
 
         <el-form-item label="燃油类型">
-          <el-select v-model="item.fuel_type_ids" multiple placeholder="请选择">
-            <el-option v-for="item in fuelTypeArr" :key="item.id" :label="item.name" :value="item.id" />
+          <el-select
+            v-model="item.fuel_type_ids"
+            multiple
+            placeholder="请选择">
+            <el-option
+              v-for="item in fuelTypeArr"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id" />
           </el-select>
         </el-form-item>
         <div class="space">
-          <img src="@/assets/iconDel.png" @click="delDevice(index, 'equipment_fuel')" />
-          <img v-if="index == form.info.equipment_fuel.length - 1" src="@/assets/addIcon.png"
+          <img
+            src="@/assets/iconDel.png"
+            @click="delDevice(index, 'equipment_fuel')" />
+          <img
+            v-if="index == form.info.equipment_fuel.length - 1"
+            src="@/assets/addIcon.png"
             @click="addDevice('equipment_fuel')" />
         </div>
         <div class="bg_box"></div>
@@ -135,10 +254,14 @@
     </el-form>
     <template #footer>
       <div class="dialog-footer">
-        <el-button class="cancle_btn" @click="dialogFormVisible = false">
+        <el-button
+          class="cancle_btn"
+          @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button class="btn_color save_btn" @click="submitClick(ruleFormRef)">
+        <el-button
+          class="btn_color save_btn"
+          @click="submitClick(ruleFormRef)">
           保存
         </el-button>
       </div>
@@ -155,11 +278,11 @@ import { ElMessage } from 'element-plus';
 const props = defineProps({
   editData: {
     type: Object,
-    default: () => { },
+    default: () => {},
   },
   getShipList: {
     type: Function,
-    default: () => { },
+    default: () => {},
   },
 });
 
@@ -216,7 +339,6 @@ const form = reactive({
         draft_bow: '',
         curve_name: '',
         curve_data: [{ speed_water: '', me_power: '' }],
-
       },
     ],
   },
@@ -236,12 +358,11 @@ const postVessel = async () => {
 };
 
 const getVesselInfo = async () => {
-
   const param = { vessel_id: props.editData.id };
 
   let res = await apis.getVesselInfo(param);
   if (res.code != 200) return;
-  form.info = res.data
+  form.info = res.data;
 };
 
 const submitClick = async formEl => {
@@ -256,21 +377,19 @@ const submitClick = async formEl => {
 };
 
 const addDevice = (type, index) => {
-
-
   if (type == 'power_speed_curve') {
     form.info.power_speed_curve.push({
       draft_astern: '',
       draft_bow: '',
       curve_name: '',
       curve_data: [{ speed_water: '', me_power: '' }],
-
     });
   }
 
   if (type == 'curve_data') {
     form.info.power_speed_curve[index].curve_data.push({
-      speed_water: '', me_power: ''
+      speed_water: '',
+      me_power: '',
     });
   }
 
@@ -292,7 +411,6 @@ const delDevice = (index, type, itemIndex) => {
 
   if (type == 'curve_data') {
     form.info.power_speed_curve[index].curve_data.splice(itemIndex, 1);
-
   }
 };
 
@@ -302,7 +420,7 @@ const change = () => {
 
 watch(dialogFormVisible, newValue => {
   if (newValue && props?.editData?.id) {
-    getVesselInfo()
+    getVesselInfo();
     // form.info = {
     //   equipment_fuel: [
     //     {
@@ -349,10 +467,9 @@ watch(dialogFormVisible, newValue => {
           draft_bow: '',
           curve_name: '',
           curve_data: [{ speed_water: '', me_power: '' }],
-
         },
       ],
-    }
+    };
   }
 });
 
@@ -400,7 +517,7 @@ defineExpose({
   padding: 26px 28px;
   border-bottom: 1px solid #f0f0f0;
 
-  &>p {
+  & > p {
     font-family: SourceHanSansCN, SourceHanSansCN;
     font-weight: bold;
     font-size: 20px;
@@ -460,8 +577,6 @@ defineExpose({
           width: 20px;
           cursor: pointer;
         }
-
-
       }
 
       .bg_box {
