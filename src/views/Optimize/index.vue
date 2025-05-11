@@ -198,6 +198,7 @@ onMounted(() => {});
 
 const search = () => {
   //optimizationFigure();
+  const shipId = store.state.selectShip;
   optimizationValues();
 };
 
@@ -212,13 +213,13 @@ watch(
   { flush: 'post' },
 );
 
-const optimizationFigure = async () => {
+const optimizationFigure = async shipId => {
   if (new Date(startDate.value).getTime() > new Date(endDate.value).getTime()) {
     ElMessage.error('开始时间不能大于结束时间');
     return;
   }
   const param = {
-    vessel_id: 1,
+    vessel_id: shipId,
     start_date: startDate.value,
     end_date: endDate.value,
   };
@@ -228,27 +229,27 @@ const optimizationFigure = async () => {
   tools.initLine(res.data);
 };
 
-const optimizationValues = async () => {
+const optimizationValues = async vessel_id => {
   if (new Date(startDate.value).getTime() > new Date(endDate.value).getTime()) {
     ElMessage.error('开始时间不能大于结束时间');
     return;
   }
-  const param = { start_date: startDate.value, end_date: endDate.value, vessel_id: 1 };
+  const param = { start_date: startDate.value, end_date: endDate.value, vessel_id };
   let res = await apis.optimizationValues(param);
   if (res.code != 200) return;
 
   const newData = res.data.map(e => {
-    const keysArr = Object.values(e);
-    console.log(e);
     return {
-      speed_water: Number(keysArr[0]).toFixed(2),
-      grade: keysArr[5],
-      cii: Number(keysArr[4]).toFixed(2),
-      gross_ton: Number(keysArr[2]).toFixed(2),
-      consumption: Number(keysArr[3]).toFixed(2),
-      delta: Number(keysArr[1]).toFixed(1),
+      speed_water: e['年均对水航速'].toFixed(2),
+      grade: e['CII评级'],
+      cii: e['CII'].toFixed(2),
+      gross_ton: e['节省燃料'].toFixed(2),
+      consumption: e['年均主机每海里油耗'].toFixed(2),
+      delta: e['对水航速差值'].toFixed(2),
     };
   });
+
+  console.log('newData', newData);
 
   tableData.value = newData;
   tools.initLine(newData);
@@ -259,6 +260,16 @@ const optimizationValues = async () => {
   cii.value = obj.cii;
   gross_ton.value = obj.gross_ton;
 };
+watch(
+  () => store.state.selectShip,
+  newValue => {
+    if (newValue) {
+      optimizationValues(newValue);
+      // optimizationFigure(newValue);
+    }
+  },
+  { immediate: true },
+);
 </script>
 
 <style lang="less" scoped src="./index.less"></style>

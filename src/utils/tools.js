@@ -246,7 +246,7 @@ var tools = {
   },
 
   //状态提醒散点图
-  initEcStat1(data) {
+  initEcStat1(data, deviation, after_deviation) {
     let data1 = data.map(e => [moment(e.pc_time).format('YYYY-MM-DD'), e.speed_deviation]);
     let data2 = data.map(e => [e.speed_water, e.shaft_power_reference]);
     console.log(data1);
@@ -273,6 +273,12 @@ var tools = {
         nameTextStyle: {
           fontSize: 16,
         },
+        axisTick: {
+          show: false, // Hide the x-axis tick lines
+        },
+        axisLine: {
+          show: false,
+        },
       },
       yAxis: {
         show: true,
@@ -281,6 +287,11 @@ var tools = {
         nameRotate: 90,
         nameTextStyle: {
           fontSize: 16,
+        },
+        axisLabel: {
+          formatter: function (value) {
+            return (value * 100).toFixed(1) + '%';
+          },
         },
         nameGap: 60,
         splitLine: {
@@ -300,8 +311,16 @@ var tools = {
           return date + '<br/>' + '速度损失率: ' + (value * 100).toFixed(2) + '%';
         },
       },
+      legend: {
+        data: ['速度损失率', '平均速度损失率', '试航报告基准线'],
+        bottom: 0,
+        padding: [5, 10],
+        itemWidth: 15,
+        itemHeight: 10,
+      },
       series: [
         {
+          name: '速度损失率',
           type: 'scatter',
           datasetIndex: 0,
           itemStyle: {
@@ -309,33 +328,66 @@ var tools = {
           },
           data: data1,
         },
+        {
+          name: '平均速度损失率',
+          type: 'line',
+          markLine: {
+            silent: true,
+            symbol: ['none', 'none'],
+            lineStyle: {
+              color: '#2F88ff',
+              type: 'dashed',
+              width: 2,
+            },
+            label: {
+              formatter: (deviation * 100).toFixed(2) + '%',
+              position: 'middle',
+              fontSize: 14,
+            },
+            data: [{ yAxis: deviation }],
+          },
+          data: [],
+        },
+        {
+          name: '试航报告基准线',
+          type: 'line',
+          markLine: {
+            silent: true,
+            symbol: ['none', 'none'],
+            lineStyle: {
+              color: '#0fff0f',
+              type: 'dashed',
+              width: 2,
+            },
+            label: {
+              formatter: '',
+              position: 'middle',
+              fontSize: 14,
+            },
+            data: [{ yAxis: 0 }],
+          },
+          data: [],
+        },
         // {
-        //   type: 'scatter',
-        //   datasetIndex: 1,
-        //   itemStyle: {
-        //     color: '#20c563',
-        //   },
-        //   data: data2,
-        // },
-        // {
+        //   name: 'after Deviation',
         //   type: 'line',
-        //   smooth: false,
-        //   datasetIndex: 2,
-        //   symbolSize: 0.1,
-        //   symbol: 'circle',
-        //   lineStyle: {
-        //     color: '#1a88ee',
+        //   markLine: {
+        //     silent: true,
+        //     lineStyle: {
+        //       color: '#88ff00',
+        //       type: 'dashed',
+        //       width: 2,
+        //     },
+        //     label: {
+        //       formatter: '距上次船体清洁平均速度损失',
+        //       position: 'middle',
+        //       fontSize: 14,
+        //     },
+        //     data: [
+        //       { yAxis: after_deviation }, // 10% threshold line
+        //     ],
         //   },
-        // },
-        // {
-        //   type: 'line',
-        //   smooth: true,
-        //   datasetIndex: 3,
-        //   symbolSize: 0.1,
-        //   symbol: 'circle',
-        //   lineStyle: {
-        //     color: '#20c563',
-        //   },
+        //   data: [],
         // },
       ],
     };
@@ -457,6 +509,10 @@ var tools = {
           nameTextStyle: {
             fontSize: 16,
           },
+          scale: true,
+          min: function (value) {
+            return Math.floor(value.min * 0.9); // Start from 90% of the minimum value
+          },
         },
         {
           alignTicks: true,
@@ -467,6 +523,18 @@ var tools = {
           nameTextStyle: {
             fontSize: 16,
           },
+          scale: true,
+          axisLabel: {
+            formatter: function (value) {
+              return value.toFixed(2); // Limit to 2 decimal places
+            },
+          },
+          min: function (value) {
+            return Math.floor(value.min * 0.9); // Start from 90% of the minimum value
+          },
+          max: function (value) {
+            return Math.floor(value.max * 1.5);
+          },
         },
       ],
 
@@ -475,7 +543,7 @@ var tools = {
           name: '',
           type: 'line',
           data: consumptionData,
-          showSymbol: false,
+          // showSymbol: false,
           label: {
             show: true,
             position: 'top',
@@ -487,7 +555,7 @@ var tools = {
           type: 'line',
           yAxisIndex: 1,
           data: ciiData,
-          showSymbol: false,
+          // showSymbol: false,
           label: {
             show: true,
             position: 'top',

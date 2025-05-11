@@ -113,7 +113,10 @@ const reminderFigure = async vessel_id => {
   if (res.code != 200) return;
   nextTick(() => {
     if (res.data.SpeedDeviation) {
-      tools.initEcStat1(res.data.SpeedDeviation);
+      const data = res.data.SpeedDeviation.filter(item => {
+        return item.speed_deviation <= 0;
+      });
+      tools.initEcStat1(data, res.data.Deviation, res.data.DeviationAfterHullClean);
     }
   });
 };
