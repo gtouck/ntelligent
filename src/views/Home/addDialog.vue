@@ -108,7 +108,7 @@
         </el-radio-group>
       </el-form-item>
       <!-- <el-form-item label="">
-        
+
         <div class="space"></div>
       </el-form-item> -->
 
@@ -154,6 +154,7 @@
         </p>
         <div
           v-for="(item, itemIndex) in form.info.power_speed_curve"
+          :key="itemIndex"
           class="curve_item">
           <div class="item_box mt0">
             <el-form-item label="船首吃水">

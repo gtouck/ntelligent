@@ -162,15 +162,16 @@ var tools = {
     chartDom2.removeAttribute('_echarts_instance_');
     const myChart2 = echarts.init(chartDom2);
     let option;
-
+    // 准备数据源，根据数值情况决定显示方式
+    const source = [
+      ['index', 'data', 'name', 'showLabel'],
+      [0, day3, '距船体重喷漆已', day3 > 0],
+      [0, day2, '距上次船体清洁已', day2 > 0],
+      [0, day1, '上次螺旋桨抛光距今 ', day1 > 0],
+    ];
     option = {
       dataset: {
-        source: [
-          ['index', 'data', 'name'],
-          [0, day3, '距船体重喷漆已'],
-          [0, day2, '距上次船体清洁已'],
-          [0, day1, '上次螺旋桨抛光距今 '],
-        ],
+        source,
       },
 
       xAxis: { name: '' },
@@ -193,13 +194,43 @@ var tools = {
           barWidth: '50%',
           label: {
             show: true,
-            formatter: '{@[1]}月',
+            formatter: function (params) {
+              // 获取当前数据点的完整数据（包括自定义的showLabel标志）
+              const dataRow = source[params.dataIndex + 1];
+              const value = dataRow[1];
+              const showLabel = dataRow[3];
+
+              if (!showLabel || value <= 0) {
+                // 如果不显示标签或值小于等于0，显示提示文字
+                if (params.name === '距船体重喷漆已') {
+                  return '未进行船体重喷漆';
+                } else if (params.name === '距上次船体清洁已') {
+                  return '未进行船体清洁';
+                } else if (params.name === '上次螺旋桨抛光距今 ') {
+                  return '未进行螺旋桨抛光';
+                }
+                return '无数据';
+              }
+
+              // 正常显示月份数据
+              return value + '月';
+            },
             color: '#1286F1',
             position: 'right',
             fontSize: '.06rem',
           },
           itemStyle: {
-            color: '#1286F1',
+            color: function (params) {
+              const dataRow = source[params.dataIndex + 1];
+              const value = dataRow[1];
+              const showLabel = dataRow[3];
+
+              // 当数值小于等于0或不应显示时，使用透明色
+              if (!showLabel || value <= 0) {
+                return 'rgba(0,0,0,0)';
+              }
+              return '#1286F1';
+            },
           },
 
           encode: {
@@ -230,33 +261,6 @@ var tools = {
         {
           source: data1,
         },
-        // {
-        //   source: data2,
-        // },
-        // {
-        //   transform: {
-        //     type: 'ecStat:regression',
-        //     fromDatasetIndex: 0,
-
-        //     config: {
-        //       method: 'exponential',
-        //       // 'end' by default
-        //       // formulaOn: 'start'
-        //     },
-        //   },
-        // },
-        // {
-        //   transform: {
-        //     type: 'ecStat:regression',
-        //     fromDatasetIndex: 1,
-        //     print: true,
-        //     config: {
-        //       method: 'exponential',
-        //       // 'end' by default
-        //       // formulaOn: 'start'
-        //     },
-        //   },
-        // },
       ],
       title: {},
 
@@ -269,14 +273,6 @@ var tools = {
         nameTextStyle: {
           fontSize: 16,
         },
-        // min: value => {
-        //   return Math.floor(value.min) - 1;
-        // },
-        // splitLine: {
-        //   lineStyle: {
-        //     type: 'dashed',
-        //   },
-        // },
       },
       yAxis: {
         show: true,
@@ -297,6 +293,11 @@ var tools = {
         trigger: 'axis',
         axisPointer: {
           type: 'cross',
+        },
+        formatter: function (params) {
+          const date = params[0].value[0];
+          const value = params[0].value[1];
+          return date + '<br/>' + '速度损失率: ' + (value * 100).toFixed(2) + '%';
         },
       },
       series: [

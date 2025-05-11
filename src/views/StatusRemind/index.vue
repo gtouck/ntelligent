@@ -81,18 +81,19 @@ import * as apis from '@/fetch/apis.js';
 
 import {} from '@/hooks/useCommon.js';
 import tools from '@/utils/tools';
+import store from '@/store';
 
 const Refcanvas = ref();
 const activeName = ref(0);
 
 onMounted(() => {
-  reminderValues();
-  reminderFigure();
+  const vessel_id = store.state.selectShip || 1;
+  reminderValues(vessel_id);
+  reminderFigure(vessel_id);
 });
-
-const reminderValues = async () => {
+const reminderValues = async vessel_id => {
   const param = {
-    vessel_id: 1,
+    vessel_id,
   };
   let res = await apis.reminderValues(param);
   if (res.code != 200) return;
@@ -104,9 +105,9 @@ const reminderValues = async () => {
   });
 };
 
-const reminderFigure = async () => {
+const reminderFigure = async vessel_id => {
   const param = {
-    vessel_id: 1,
+    vessel_id,
   };
   let res = await apis.reminderFigure(param);
   if (res.code != 200) return;
@@ -116,6 +117,20 @@ const reminderFigure = async () => {
     }
   });
 };
+/*
+监听当前选中船舶,当选中船舶发生改变时
+调用reminderValues和reminderFigure方法
+*/
+watch(
+  () => store.state.selectShip,
+  newValue => {
+    if (newValue) {
+      reminderValues(newValue);
+      reminderFigure(newValue);
+    }
+  },
+  { immediate: true },
+);
 
 //截图
 const capture = async () => {

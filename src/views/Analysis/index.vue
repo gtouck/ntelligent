@@ -4,29 +4,59 @@
       <div class="search_left flex-row align-center">
         <p>属性</p>
         <el-select v-model="selectAttr">
-          <el-option v-for="item in attributesArr" :key="item.value" :label="item.name" :value="item.value"></el-option>
+          <el-option
+            v-for="item in attributesArr"
+            :key="item.value"
+            :label="item.name"
+            :value="item.value"></el-option>
         </el-select>
       </div>
       <div class="search-mid">
-        <div v-for="(item, index) in shipArr" :key="index" class="ship_box flex-row align-center">
+        <div
+          v-for="(item, index) in shipArr"
+          :key="index"
+          class="ship_box flex-row align-center">
           <p>船舶{{ index + 1 }}</p>
           <el-select v-model="item.ship">
-            <el-option v-for="v in data" :key="v.id" :label="v.name" :value="v.id"></el-option>
+            <el-option
+              v-for="v in data"
+              :key="v.id"
+              :label="v.name"
+              :value="v.id"></el-option>
           </el-select>
           <p class="lebal_text1">时间期间</p>
-          <el-date-picker v-model="item.startDate" value-format="YYYY-MM-DD" type="date" />
+          <el-date-picker
+            v-model="item.startDate"
+            value-format="YYYY-MM-DD"
+            type="date" />
           <p class="lebal_text2">-</p>
-          <el-date-picker v-model="item.endDate" value-format="YYYY-MM-DD" type="date" />
+          <el-date-picker
+            v-model="item.endDate"
+            value-format="YYYY-MM-DD"
+            type="date" />
           <p class="lebal_text3">滑失比</p>
-          <el-slider v-model="item.slipRatio" range show-stops :max="20" :min="-20" />
+          <el-slider
+            v-model="item.slipRatio"
+            range
+            show-stops
+            :max="20"
+            :min="-20" />
 
-          <img class="close" src="@/assets/close.png" @click="delShip(index)" />
+          <img
+            class="close"
+            src="@/assets/close.png"
+            @click="delShip(index)" />
         </div>
       </div>
 
-      <img src="@/assets/addIcon.png" class="addIcon" @click="addShip" />
+      <img
+        src="@/assets/addIcon.png"
+        class="addIcon"
+        @click="addShip" />
 
-      <el-button class="btn_color search_btn" @click="getData">
+      <el-button
+        class="btn_color search_btn"
+        @click="getData">
         搜索
       </el-button>
       <el-button class="add_btn">
@@ -43,16 +73,23 @@
           <span>{{ selectAttrName }}分布对比图</span>
         </div>
         <div class="head_right flex-row align-center">
-          <span v-for="item in typeArr" :key="item.id" :class="{ active: selectId == item.id }"
+          <span
+            v-for="item in typeArr"
+            :key="item.id"
+            :class="{ active: selectId == item.id }"
             @click="selectId = item.id">
             {{ item.name }}
           </span>
         </div>
       </div>
       <div class="echart_box">
-        <div v-if="selectId == 2" id="myBar"></div>
+        <div
+          v-if="selectId == 2"
+          id="myBar"></div>
         <MapComponent v-if="selectId == 1" />
-        <div v-if="selectId == 3" id="scatterBox"></div>
+        <div
+          v-if="selectId == 3"
+          id="scatterBox"></div>
       </div>
     </div>
   </div>
@@ -61,11 +98,12 @@
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue';
 import { useStore } from 'vuex';
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus';
 import * as echarts from 'echarts';
 import * as apis from '@/fetch/apis.js';
 import { useAttributes, useUserInfo } from '@/hooks/useCommon.js';
 import MapComponent from '@/components/MapComponent.vue';
+import { formatter } from 'element-plus';
 const store = useStore();
 const { attributesArr } = useAttributes();
 
@@ -97,7 +135,7 @@ const shipArr = ref([
 
 let option;
 
-onMounted(() => { });
+onMounted(() => {});
 
 watch(
   selectId,
@@ -113,13 +151,13 @@ watch(
 const getData = () => {
   initOption(); //初始化option
   shipArr.value.forEach(async (e, index) => {
-    if (new Date(e.startDate).getTime() > new Date(e.endDate,).getTime()) {
-      ElMessage.error('开始时间不能大于结束时间')
-      return
+    if (new Date(e.startDate).getTime() > new Date(e.endDate).getTime()) {
+      ElMessage.error('开始时间不能大于结束时间');
+      return;
     }
     if (!e.ship) {
-      ElMessage.error('请选择船舶')
-      return
+      ElMessage.error('请选择船舶');
+      return;
     }
     const param = {
       attribute_name: selectAttr.value,
@@ -226,8 +264,13 @@ const initScatter = data => {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
-        type: 'cross'
-      }
+        type: 'cross',
+      },
+      formatter: function (params) {
+        const date = new Date(params[0].value[0]);
+        const formattedDate = date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+        return formattedDate + '<br/>' + selectAttrName.value + ': ' + params[0].value[1];
+      },
     },
 
     xAxis: {
@@ -241,6 +284,9 @@ const initScatter = data => {
       axisLabel: {
         formatter: '{MM}-{dd}',
         fontSize: 10,
+      },
+      tooltip: {
+        show: false,
       },
       splitLine: {
         lineStyle: {
@@ -292,7 +338,7 @@ const initBar = (data, name) => {
   const myChart = echarts.init(document.getElementById('myBar'));
   option.legend.data.push(name);
   option.xAxis[0].data = valueArr;
-  option.xAxis[0].name = selectAttrName.value + '(km/nmile)';
+  option.xAxis[0].name = selectAttrName.value;
   const seriesObj = {
     name: name,
     type: 'bar',

@@ -4,7 +4,13 @@
     <div class="main_head flex-row align-center">
       <img src="@/assets/mainShip.png" />
       <p class="company_name">{{ companyInfo.name }}</p>
-      <el-select v-model="selectShip">
+      <el-select
+        v-model="selectShip"
+        @change="
+          e => {
+            store.commit('setSelectShip', e);
+          }
+        ">
         <el-option
           v-for="item in shipArr"
           :key="item.id"
