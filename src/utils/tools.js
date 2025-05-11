@@ -571,12 +571,19 @@ var tools = {
     var chartDom = document.getElementById('chartBox');
     var myChart = echarts.init(chartDom);
     let xData = data.map(e => e.date);
-    let yData = data.map(e => e.value);
+    let ciiData = data.map(e => parseFloat(e.cii).toFixed(2)); // 保留两位小数
+    let cii_tempData = data.map(e => parseFloat(e.cii_temp).toFixed(2)); // 保留两位小数
     var option;
 
     option = {
       tooltip: {
         trigger: 'axis',
+      },
+      legend: {
+        data: ['CII', 'CII_temp'],
+        textStyle: {
+          fontSize: 16,
+        },
       },
       xAxis: {
         type: 'category',
@@ -600,7 +607,15 @@ var tools = {
       },
       series: [
         {
-          data: yData,
+          name: 'CII',
+          data: ciiData,
+          type: 'line',
+          smooth: true,
+          // showSymbol: false,
+        },
+        {
+          name: 'CII_temp',
+          data: cii_tempData,
           type: 'line',
           smooth: true,
           // showSymbol: false,
