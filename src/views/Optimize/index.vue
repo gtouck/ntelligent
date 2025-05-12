@@ -118,11 +118,11 @@
               align="center"
               label="对水航速差值" />
             <el-table-column
-              prop="gross_ton"
+              prop="consumption"
               align="center"
               label="年均主机每海里消耗" />
             <el-table-column
-              prop="consumption"
+              prop="gross_ton"
               align="center"
               label="节省燃料" />
 

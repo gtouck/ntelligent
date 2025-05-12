@@ -133,6 +133,7 @@ const getData = async () => {
 const initBar = data => {
   const { total, me, dg, blr } = data;
   const myChart = echarts.init(document.getElementById('myBar'));
+  const unitName = energyType.value === '总油耗' ? '吨' : 'kg/nmile';
 
   const option = {
     title: {},
@@ -161,7 +162,7 @@ const initBar = data => {
         axisLabel: {
           formatter: '{value}',
         },
-        name: `${energyType.value}(吨)`,
+        name: `${energyType.value}(${unitName})`,
         nameLocation: 'middle',
         nameRotate: '90',
         nameTextStyle: {
