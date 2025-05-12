@@ -136,10 +136,20 @@ const initBar = data => {
   const unitName = energyType.value === '总油耗' ? '吨' : 'kg/nmile';
 
   const option = {
+    grid: {
+      bottom: 40, // 确保底部有足够空间显示 x 轴
+      left: 100, // 确保左侧有足够空间显示 y 轴
+    },
     title: {},
     color: ['#1a88ee', '#20c563'],
     tooltip: {
       trigger: 'axis',
+      formatter: function (params) {
+        // params[0] 是第一个系列的数据
+        const value = params[0].value;
+        // 只有当值大于0时才显示提示框
+        return value > 0 ? `${params[0].name}: ${value}` : '';
+      },
     },
 
     legend: {
@@ -150,6 +160,10 @@ const initBar = data => {
     xAxis: [
       {
         data: ['全船', '主机', '副机', '锅炉'],
+        position: 'bottom', // x 轴位置固定在底部
+        axisTick: {
+          show: false,
+        },
       },
     ],
     yAxis: [
@@ -174,13 +188,25 @@ const initBar = data => {
     series: [
       {
         type: 'bar',
-        data: [returnToFixed(total), returnToFixed(me), returnToFixed(dg), returnToFixed(blr)],
+        data: [returnToFixed(total), returnToFixed(me), returnToFixed(dg), returnToFixed(blr)].map(
+          value => ({
+            value: value >= 0 ? value : 0, // 负数时值设为 -1，不显示柱子
+            itemStyle: {
+              color: value >= 0 ? '#1a88ee' : 'rgba(0,0,0,0)',
+            },
+            label: {
+              show: true,
+              position: 'bottom', // 统一设置在底部显示
+              formatter: value >= 0 ? '' : '数据异常\n消耗量为负值\n需检查',
+              color: value >= 0 ? '#000' : '#1a88ee',
+              fontSize: value >= 0 ? 12 : 14,
+              distance: value >= 0 ? 5 : -10,
+              align: 'center',
+              verticalAlign: 'bottom',
+            },
+          }),
+        ),
         barWidth: '20%',
-        label: {
-          show: true,
-          position: 'top',
-          formatter: '{c}',
-        },
       },
     ],
   };
