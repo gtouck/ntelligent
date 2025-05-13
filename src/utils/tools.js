@@ -48,6 +48,7 @@ var tools = {
     const chartDom1 = document.getElementById('chart3');
     chartDom1.removeAttribute('_echarts_instance_');
     const myChart1 = echarts.init(chartDom1);
+    const abd_data = Math.abs(data) * 100;
 
     let option;
 
@@ -65,7 +66,7 @@ var tools = {
             // formatter: ['{a|{c}%}', '{b|增加油耗}'].join('\n'),
             color: '#DC4C3F',
             formatter: params => {
-              return [100 - params.value + '%', '{b|速度损失}'].join('\n');
+              return [(100 - params.value).toFixed(2) + '%', '{b|速度损失}'].join('\n');
             },
             fontSize: 16,
             lineHeight: 18,
@@ -90,8 +91,8 @@ var tools = {
           },
           itemStyle: {},
           data: [
-            { value: data, itemStyle: { color: '#DC4C3F' } },
-            { value: 100 - data, itemStyle: { color: '#eee' } },
+            { value: abd_data, itemStyle: { color: '#DC4C3F' } },
+            { value: 100 - abd_data, itemStyle: { color: '#eee' } },
           ],
         },
       ],

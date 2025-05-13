@@ -84,24 +84,11 @@ import store from '@/store';
 const Refcanvas = ref();
 const activeName = ref(0);
 
-onMounted(() => {
-  const vessel_id = store.state.selectShip || 1;
-  // reminderValues(vessel_id);
-  reminderFigure(vessel_id);
-});
-// const reminderValues = async vessel_id => {
-//   const param = {
-//     vessel_id,
-//   };
-//   let res = await apis.reminderValues(param);
-//   if (res.code != 200) return;
-//   const { power_increased_all, power_increased_since_repaint } = res.data;
-//   nextTick(() => {
-//     tools.initPie3(power_increased_all * 100);
-//     tools.initPie4(power_increased_since_repaint * 100);
-//     tools.initBar1(res.data);
-//   });
-// };
+// onMounted(() => {
+//   const vessel_id = store.state.selectShip || 1;
+//   // reminderValues(vessel_id);
+//   reminderFigure(vessel_id);
+// });
 
 const reminderFigure = async vessel_id => {
   const param = {
@@ -124,7 +111,21 @@ const reminderFigure = async vessel_id => {
         newly_paint_date,
         propeller_polish_date,
       } = res.data;
-      tools.initPie3(Math.abs(Deviation * 100).toFixed(2));
+      console.log(
+        'Deviation',
+        Deviation,
+        'DeviationAfterHullClean',
+        DeviationAfterHullClean,
+        'hull_clean_date',
+        hull_clean_date,
+        'newly_paint_date',
+        newly_paint_date,
+        'propeller_polish_date',
+        propeller_polish_date,
+        Math.abs(Deviation * 100).toFixed(2),
+      );
+
+      tools.initPie3(Deviation);
       tools.initPie4(Math.abs(DeviationAfterHullClean * 100).toFixed(2));
       tools.initBar1({
         days_after_propeller_polishing: propeller_polish_date,
