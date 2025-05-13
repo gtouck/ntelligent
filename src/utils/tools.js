@@ -348,6 +348,7 @@ var tools = {
           name: '速度损失率',
           type: 'scatter',
           datasetIndex: 0,
+          symbolSize: 8, // Added scatter point size (you can adjust this value)
           itemStyle: {
             color: '#1a88ee',
           },

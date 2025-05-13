@@ -96,16 +96,18 @@ import { useFuelTypeCategory } from '@/hooks/useCommon.js';
 const store = useStore();
 const { fuelTypeCategoryArr } = useFuelTypeCategory();
 const fuelType = ref('hfo'); // 油品种类
-const energyType = ref(''); //能耗类型
+const energyType = ref('总油耗'); //能耗类型
 const shipArr = ref([
   {
-    ship: '',
+    ship: store.state.selectShip || 1,
     startDate: '2023-01-01',
     endDate: '2023-01-31',
   },
 ]);
 
-onMounted(() => {});
+onMounted(() => {
+  getData();
+});
 
 const getData = async () => {
   if (

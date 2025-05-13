@@ -45,16 +45,17 @@
             show-stops
             :max="20"
             :min="-20" />
-
-          <img
+          <!-- <img
             class="close"
             src="@/assets/close.png"
-            @click="delShip(index)"
-            v-if="index != 0" />
+            @click="delShip(index)" /> -->
         </div>
       </div>
 
-      <!-- <img src="@/assets/addIcon.png" class="addIcon" @click="addShip" /> -->
+      <!-- <img
+        src="@/assets/addIcon.png"
+        class="addIcon"
+        @click="addShip" /> -->
 
       <el-button
         class="btn_color search_btn"
@@ -95,18 +96,20 @@ import { useAttributesMap, useUserInfo } from '@/hooks/useCommon.js';
 const store = useStore();
 const { attributeMappingArr } = useAttributesMap();
 
-const selectMapping = ref('');
+const selectMapping = ref(attributeMappingArr[0].value);
 
 const shipArr = ref([
   {
-    ship: '',
+    ship: store.state.selectShip || 1,
     startDate: '2023-01-01',
     endDate: '2023-01-31',
     slipRatio: [-20, 20],
   },
 ]);
 
-onMounted(() => {});
+onMounted(() => {
+  getData();
+});
 
 const getData = async () => {
   if (!selectMapping.value) {
@@ -122,19 +125,20 @@ const getData = async () => {
     ElMessage.error('开始时间不能大于结束时间');
     return;
   }
-
-  const param = {
-    attribute_name1: selectMapping.value.split('-')[0],
-    attribute_name2: selectMapping.value.split('-')[1],
-    vessel_id: shipArr.value[0].ship,
-    start_date: shipArr.value[0].startDate,
-    end_date: shipArr.value[0].endDate,
-    min_slip_ratio: shipArr.value[0].slipRatio[0],
-    max_slip_ratio: shipArr.value[0].slipRatio[1],
-  };
-  let res = await apis.attributeRelation(param);
-  if (res.code != 200) return;
-  initEchart(res.data);
+  shipArr.value.forEach(async ship => {
+    const param = {
+      attribute_name1: selectMapping.value.split('-')[0],
+      attribute_name2: selectMapping.value.split('-')[1],
+      vessel_id: ship.ship,
+      start_date: ship.startDate,
+      end_date: ship.endDate,
+      min_slip_ratio: ship.slipRatio[0],
+      max_slip_ratio: ship.slipRatio[1],
+    };
+    let res = await apis.attributeRelation(param);
+    if (res.code != 200) return;
+    initEchart(res.data);
+  });
 };
 
 const initEchart = data => {
@@ -235,7 +239,10 @@ const delShip = index => {
 };
 
 const addShip = () => {
-  shipArr.value.push({ ship: '', startDate: '', endDate: '', slipRatio: [-20, 20] });
+  shipArr.value.push({
+    ...shipArr.value[0],
+    ship: '',
+  });
 };
 
 const selectMapName = computed(() => {

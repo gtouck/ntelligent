@@ -107,7 +107,7 @@ import { formatter } from 'element-plus';
 const store = useStore();
 const { attributesArr } = useAttributes();
 
-const selectAttr = ref('');
+const selectAttr = ref(attributesArr[0].value);
 const selectId = ref(2);
 const typeArr = [
   {
@@ -126,7 +126,7 @@ const typeArr = [
 
 const shipArr = ref([
   {
-    ship: '',
+    ship: store.state.selectShip || 1,
     startDate: '2023-01-01',
     endDate: '2023-01-31',
     slipRatio: [-20, 20],
@@ -135,7 +135,9 @@ const shipArr = ref([
 
 let option;
 
-onMounted(() => {});
+onMounted(() => {
+  getData();
+});
 
 watch(
   selectId,

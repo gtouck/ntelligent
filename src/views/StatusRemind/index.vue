@@ -28,8 +28,8 @@
             <span>船体及螺旋桨脏污状态估计</span>
           </div>
           <div
-            class="bottom"
-            v-if="activeName == 0">
+            v-if="activeName == 0"
+            class="bottom">
             <div class="leftChart">
               <span>与出厂状态相比</span>
               <div id="chart3"></div>
@@ -64,7 +64,6 @@
             <div class="flex-row align-center justify-center btn_color">
               <img src="@/assets/dateIcon.png" />
             </div>
-
             <span>不同对水航速下参考期与评估期所需主机功率对比</span>
           </div>
         </div>
@@ -79,7 +78,6 @@ import { ref, computed, onMounted, watch, nextTick } from 'vue';
 
 import * as apis from '@/fetch/apis.js';
 
-import {} from '@/hooks/useCommon.js';
 import tools from '@/utils/tools';
 import store from '@/store';
 
@@ -88,22 +86,22 @@ const activeName = ref(0);
 
 onMounted(() => {
   const vessel_id = store.state.selectShip || 1;
-  reminderValues(vessel_id);
+  // reminderValues(vessel_id);
   reminderFigure(vessel_id);
 });
-const reminderValues = async vessel_id => {
-  const param = {
-    vessel_id,
-  };
-  let res = await apis.reminderValues(param);
-  if (res.code != 200) return;
-  const { power_increased_all, power_increased_since_repaint } = res.data;
-  nextTick(() => {
-    tools.initPie3(power_increased_all * 100);
-    tools.initPie4(power_increased_since_repaint * 100);
-    tools.initBar1(res.data);
-  });
-};
+// const reminderValues = async vessel_id => {
+//   const param = {
+//     vessel_id,
+//   };
+//   let res = await apis.reminderValues(param);
+//   if (res.code != 200) return;
+//   const { power_increased_all, power_increased_since_repaint } = res.data;
+//   nextTick(() => {
+//     tools.initPie3(power_increased_all * 100);
+//     tools.initPie4(power_increased_since_repaint * 100);
+//     tools.initBar1(res.data);
+//   });
+// };
 
 const reminderFigure = async vessel_id => {
   const param = {
@@ -118,6 +116,22 @@ const reminderFigure = async vessel_id => {
       });
       tools.initEcStat1(data, res.data.Deviation, res.data.DeviationAfterHullClean);
     }
+    if (res.data) {
+      const {
+        Deviation,
+        DeviationAfterHullClean,
+        hull_clean_date,
+        newly_paint_date,
+        propeller_polish_date,
+      } = res.data;
+      tools.initPie3(Math.abs(Deviation * 100).toFixed(2));
+      tools.initPie4(Math.abs(DeviationAfterHullClean * 100).toFixed(2));
+      tools.initBar1({
+        days_after_propeller_polishing: propeller_polish_date,
+        days_after_clean: hull_clean_date,
+        days_after_repaint: newly_paint_date,
+      });
+    }
   });
 };
 /*
@@ -128,7 +142,7 @@ watch(
   () => store.state.selectShip,
   newValue => {
     if (newValue) {
-      reminderValues(newValue);
+      // reminderValues(newValue);
       reminderFigure(newValue);
     }
   },
