@@ -111,19 +111,6 @@ const reminderFigure = async vessel_id => {
         newly_paint_date,
         propeller_polish_date,
       } = res.data;
-      console.log(
-        'Deviation',
-        Deviation,
-        'DeviationAfterHullClean',
-        DeviationAfterHullClean,
-        'hull_clean_date',
-        hull_clean_date,
-        'newly_paint_date',
-        newly_paint_date,
-        'propeller_polish_date',
-        propeller_polish_date,
-        Math.abs(Deviation * 100).toFixed(2),
-      );
 
       tools.initPie3(Deviation);
       tools.initPie4(Math.abs(DeviationAfterHullClean * 100).toFixed(2));

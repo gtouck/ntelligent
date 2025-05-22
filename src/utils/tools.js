@@ -66,7 +66,10 @@ var tools = {
             // formatter: ['{a|{c}%}', '{b|增加油耗}'].join('\n'),
             color: '#DC4C3F',
             formatter: params => {
-              return [(100 - params.value).toFixed(2) + '%', '{b|速度损失}'].join('\n');
+              return [
+                100 - params.value > 0 ? (100 - params.value).toFixed(2) + '%' : '-',
+                '{b|速度损失}',
+              ].join('\n');
             },
             fontSize: 16,
             lineHeight: 18,
@@ -119,7 +122,10 @@ var tools = {
           label: {
             color: '#DC4C3F',
             formatter: params => {
-              return [100 - params.value + '%', '{b|速度损失}'].join('\n');
+              return [
+                100 - params.value > 0 ? (100 - params.value).toFixed(2) + '%' : '-',
+                '{b|速度损失}',
+              ].join('\n');
             },
             fontSize: 16,
             lineHeight: 18,

@@ -85,13 +85,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import * as echarts from 'echarts';
 import { ElMessage } from 'element-plus';
 import ecStat from 'echarts-stat';
 import * as apis from '@/fetch/apis.js';
 import { useStore } from 'vuex';
 import { useAttributesMap, useUserInfo } from '@/hooks/useCommon.js';
+import { calculateR2 } from '@/utils/cacl';
 
 const store = useStore();
 const { attributeMappingArr } = useAttributesMap();
@@ -148,7 +149,17 @@ const initEchart = data => {
   const myChart = echarts.init(chartDom);
   let option;
   const nameArr = selectMapName.value.split('-');
+  /**
+   * myRegression的属性有points和parameter,expression
+   * 下面给出其jsdoc
+   * @typedef {Object} myRegression
+   * @property {Array} points - 回归后的数据点
+   * @property {Array} parameter - 回归参数
+   * @property {string} expression - 回归方程
+   */
   const myRegression = ecStat.regression('polynomial', data, 2);
+
+  const r2 = calculateR2(myRegression.parameter, data);
 
   // echarts.registerTransform(ecStat.transform.regression);
   option = {
@@ -218,14 +229,15 @@ const initEchart = data => {
         left: 'center',
         top: '5%',
         style: {
-          text: '回归方程: ' + myRegression.expression,
-          fontSize: 14,
+          text: '回归方程: ' + myRegression.expression + '\nR²: ' + r2.toFixed(4),
+          fontSize: 18,
           fontFamily: 'Arial',
           fontWeight: 'normal',
-          fill: '#333',
-          backgroundColor: 'rgba(255,255,255,0.7)',
+          fill: '#1a88ee',
+          // backgroundColor: 'rgba(255,255,255,0.7)',
           padding: [8, 12],
           borderRadius: 4,
+          lineHeight: 24,
         },
       },
     ],
@@ -249,7 +261,6 @@ const selectMapName = computed(() => {
   const data = attributeMappingArr.filter(e => e.value == selectMapping.value)[0]?.name;
   return data || '';
 });
-console.log(selectMapName);
 
 const data = computed(() => store.state.shipArr);
 </script>
