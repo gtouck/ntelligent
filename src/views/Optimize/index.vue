@@ -102,6 +102,7 @@
           <el-table
             v-if="selectType == 'table'"
             :data="tableData"
+            :row-class-name="tableRowClassName"
             stripe
             size="large"
             max-height="400px">
@@ -200,6 +201,16 @@ const search = () => {
   //optimizationFigure();
   const shipId = store.state.selectShip;
   optimizationValues();
+};
+
+const tableRowClassName = ({ row, rowIndex }) => {
+  if (rowIndex < 5) {
+    return 'row-green';
+  } else if (rowIndex === 5) {
+    return 'row-bold-black';
+  } else {
+    return 'row-red';
+  }
 };
 
 watch(

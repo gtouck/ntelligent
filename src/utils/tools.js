@@ -600,23 +600,60 @@ var tools = {
     option && myChart.setOption(option);
   },
 
+  //CII 走势图
   initCii(data) {
     var chartDom = document.getElementById('chartBox');
     var myChart = echarts.init(chartDom);
-    let xData = data.map(e => e.date);
-    let ciiData = data.map(e => parseFloat(e.cii).toFixed(2)); // 保留两位小数
-    let cii_tempData = data.map(e => parseFloat(e.cii_temp).toFixed(2)); // 保留两位小数
-    var option;
 
-    option = {
+    // 提取日期与 CII 数据
+    let xData = data.map(e => e.date);
+    let ciiData = data.map(e => parseFloat(e.cii));
+    let cii_tempData = data.map(e => parseFloat(e.cii_temp));
+
+    // 提取阈值（所有数据一致，取第一个即可）
+    let { inferior, upper, lower, superior } = data[0];
+    inferior = parseFloat(inferior);
+    upper = parseFloat(upper);
+    lower = parseFloat(lower);
+    superior = parseFloat(superior);
+
+    // 自动计算Y轴范围（向上和向下各扩展10%，并保留两位小数）
+    let allValues = ciiData.concat(cii_tempData);
+    let minY = Math.min(...allValues);
+    let maxY = Math.max(...allValues);
+    let yMargin = (maxY - minY) * 0.1;
+    minY = parseFloat((minY - yMargin).toFixed(2));
+    maxY = parseFloat((maxY + yMargin).toFixed(2));
+
+    const option = {
       tooltip: {
         trigger: 'axis',
       },
       legend: {
-        data: ['Attained CII', '即时CII'],
+        data: [
+          {
+            name: 'Attained CII',
+            icon: 'path://M802.59 532.76H221.4c-11.47 0-20.76-9.3-20.76-20.76s9.29-20.76 20.76-20.76h581.19c11.47 0 20.76 9.3 20.76 20.76s-9.29 20.76-20.76 20.76z',
+            itemStyle: {
+              color: '#3ebb6e',
+            },
+          },
+          {
+            name: '即时CII',
+            icon: 'path://M934.4 490.666667h-51.2a25.6 25.6 0 1 0 0 51.2h51.2a25.6 25.6 0 1 0 0-51.2zM115.2 490.666667h-34.133333a25.6 25.6 0 1 0 0 51.2h34.133333a25.6 25.6 0 1 0 0-51.2zM388.266667 490.666667h-51.2a25.6 25.6 0 1 0 0 51.2h51.2a25.6 25.6 0 1 0 0-51.2zM251.733333 490.666667h-51.2a25.6 25.6 0 1 0 0 51.2h51.2a25.6 25.6 0 1 0 0-51.2zM524.8 490.666667h-51.2a25.6 25.6 0 1 0 0 51.2h51.2a25.6 25.6 0 1 0 0-51.2zM797.866667 490.666667h-51.2a25.6 25.6 0 1 0 0 51.2h51.2a25.6 25.6 0 1 0 0-51.2zM661.333333 490.666667h-51.2a25.6 25.6 0 1 0 0 51.2h51.2a25.6 25.6 0 1 0 0-51.2z',
+            itemStyle: {
+              color: '#3ebb6e',
+            },
+          },
+        ],
         textStyle: {
-          fontSize: 16,
+          fontSize: 15,
         },
+      },
+      grid: {
+        left: '10%',
+        right: '15%',
+        bottom: '20%',
       },
       xAxis: {
         type: 'category',
@@ -629,8 +666,10 @@ var tools = {
         },
       },
       yAxis: {
-        name: 'CII',
         type: 'value',
+        name: 'CII',
+        min: minY,
+        max: maxY,
         nameLocation: 'middle',
         nameRotate: 90,
         nameGap: 30,
@@ -638,20 +677,65 @@ var tools = {
           fontSize: 16,
         },
       },
+      visualMap: {
+        type: 'piecewise',
+        top: 50,
+        right: 10,
+        show: true,
+        pieces: [
+          {
+            gt: inferior,
+            color: '#f36200',
+            label: `E: > ${inferior.toFixed(2)}`,
+          },
+          {
+            gt: upper,
+            lte: inferior,
+            color: '#f7b800',
+            label: `D: (${upper.toFixed(2)} - ${inferior.toFixed(2)}]`,
+          },
+          {
+            gt: lower,
+            lte: upper,
+            color: '#fcec00',
+            label: `C: (${lower.toFixed(2)} - ${upper.toFixed(2)}]`,
+          },
+          {
+            gt: superior,
+            lte: lower,
+            color: '#a7df01',
+            label: `B: (${superior.toFixed(2)} - ${lower.toFixed(2)}]`,
+          },
+          {
+            lte: superior,
+            color: '#3ebb6e',
+            label: `A: ≤ ${superior.toFixed(2)}`,
+          },
+        ],
+        outOfRange: {
+          color: '#999',
+        },
+        calculable: false,
+      },
       series: [
         {
           name: 'Attained CII',
-          data: ciiData,
           type: 'line',
           smooth: true,
-          // showSymbol: false,
+          data: ciiData.map(v => v.toFixed(2)),
+          lineStyle: {
+            width: 2,
+          },
         },
         {
           name: '即时CII',
-          data: cii_tempData,
           type: 'line',
           smooth: true,
-          // showSymbol: false,
+          data: cii_tempData.map(v => v.toFixed(2)),
+          lineStyle: {
+            type: 'dotted',
+            width: 2,
+          },
         },
       ],
     };
