@@ -347,7 +347,7 @@ const initBar = (data, name) => {
     data: frequencyArr,
 
     label: {
-      show: false,
+      show: true,
       position: 'top',
       formatter: '{c}',
     },

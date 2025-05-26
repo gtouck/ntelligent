@@ -198,11 +198,11 @@ const initBar = data => {
             },
             label: {
               show: true,
-              position: 'bottom', // 统一设置在底部显示
-              formatter: value >= 0 ? '' : '数据异常\n消耗量为负值\n需检查',
+              position: 'top', // 统一设置在顶部显示
+              formatter: value >= 0 ? '{c}' : '数据异常\n消耗量为负值\n需检查',
               color: value >= 0 ? '#000' : '#1a88ee',
               fontSize: value >= 0 ? 12 : 14,
-              distance: value >= 0 ? 5 : -10,
+              distance: value >= 0 ? 5 : 5,
               align: 'center',
               verticalAlign: 'bottom',
             },
