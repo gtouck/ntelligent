@@ -200,7 +200,7 @@ onMounted(() => {});
 const search = () => {
   //optimizationFigure();
   const shipId = store.state.selectShip;
-  optimizationValues();
+  optimizationValues(shipId);
 };
 
 const tableRowClassName = ({ row, rowIndex }) => {
@@ -246,6 +246,7 @@ const optimizationValues = async vessel_id => {
     return;
   }
   const param = { start_date: startDate.value, end_date: endDate.value, vessel_id };
+  console.log('param', param);
   let res = await apis.optimizationValues(param);
   if (res.code != 200) return;
 
