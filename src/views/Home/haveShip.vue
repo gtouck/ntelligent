@@ -7,36 +7,52 @@
           <span>{{ data.length }}</span>
           条船舶信息
         </p>
-        <div class="flex-row align-center justify-center" @click="ascend = !ascend">
+        <div
+          class="flex-row align-center justify-center"
+          @click="ascend = !ascend">
           <span>时间</span>
-          <img src="@/assets/sort.png" :class="{ sort: ascend }" />
+          <img
+            src="@/assets/sort.png"
+            :class="{ sort: ascend }" />
         </div>
       </div>
       <div class="right_box flex-row">
-        <el-input v-model="search" :input-style="{
-          fontFamily: 'PingFangSC, PingFang SC',
-          fontWeight: '400',
-        }" placeholder="输入关键字查询">
+        <el-input
+          v-model="search"
+          :input-style="{
+            fontFamily: 'PingFangSC, PingFang SC',
+            fontWeight: '400',
+          }"
+          placeholder="输入关键字查询">
           <template #suffix>
-            <img class="search" src="@/assets/search.png" />
+            <img
+              class="search"
+              src="@/assets/search.png" />
           </template>
         </el-input>
         <el-button @click="addOpen">
           <template #icon>
-            <img class="add" src="@/assets/add.png" />
+            <img
+              class="add"
+              src="@/assets/add.png" />
           </template>
           新增船舶
         </el-button>
         <el-button @click="uploadOpen">
           <template #icon>
-            <img class="upload" src="@/assets/upload.png" />
+            <img
+              class="upload"
+              src="@/assets/upload.png" />
           </template>
           上传数据
         </el-button>
       </div>
     </div>
     <div class="ship_item">
-      <div v-for="(item, index) in data" :key="index" style="margin-bottom: 10px;">
+      <div
+        v-for="(item, index) in data"
+        :key="index"
+        style="margin-bottom: 10px">
         <div class="item_head flex-row align-center justify-between">
           <div class="head_left flex-row align-center">
             <img src="@/assets/shipIcon.png" />
@@ -45,38 +61,52 @@
           <div class="head_right">
             <el-button @click="historyOpen">
               <template #icon>
-                <img class="upload" src="@/assets/upload.png" />
+                <img
+                  class="upload"
+                  src="@/assets/upload.png" />
               </template>
               查看上传历史
             </el-button>
             <el-button @click="seeResult(item)">
               <template #icon>
-                <img class="upload" src="@/assets/upload.png" />
+                <img
+                  class="upload"
+                  src="@/assets/upload.png" />
               </template>
               查看分析结果
             </el-button>
             <el-button @click="addOpen">
               <template #icon>
-                <img class="upload" src="@/assets/upload.png" />
+                <img
+                  class="upload"
+                  src="@/assets/upload.png" />
               </template>
               编辑
             </el-button>
             <el-button>
               <template #icon>
-                <img class="upload" src="@/assets/upload.png" />
+                <img
+                  class="upload"
+                  src="@/assets/upload.png" />
               </template>
               删除
             </el-button>
           </div>
         </div>
         <ItemContent :item="item" />
+        
       </div>
 
       <div class="pagination_bx flex-row align-center justify-end">
         <el-icon>
           <DArrowLeft />
         </el-icon>
-        <el-pagination :current-page="currentPage" :page-size="3" :background="true" layout="pager" :total="total"
+        <el-pagination
+          :current-page="currentPage"
+          :page-size="3"
+          :background="true"
+          layout="pager"
+          :total="total"
           @current-change="currentChange" />
         <el-icon>
           <DArrowRight />
@@ -128,8 +158,7 @@ const totalSize = computed(() => {
   return Math.ceil(total.value / 3);
 });
 
-const seeResult = (item) => {
-
+const seeResult = item => {
   store.commit('setSelectShip', item.id);
   router.push('/optimize');
 };

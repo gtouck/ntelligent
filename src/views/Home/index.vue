@@ -1,6 +1,5 @@
 <template>
   <div class="home-page">
-
     <Head />
     <div class="container">
       <div class="title_box">
@@ -21,8 +20,12 @@
         </div>
       </div>
       <EmptyShip v-if="shipType == 0" />
-      <LittleShip v-if="shipType == 1" :getShipList="getShipList" />
-      <HaveShip v-if="shipType == 2" :getShipList="getShipList" />
+      <LittleShip
+        v-if="shipType == 1"
+        :getShipList="getShipList" />
+      <HaveShip
+        v-if="shipType == 2"
+        :getShipList="getShipList" />
     </div>
   </div>
 </template>
@@ -63,7 +66,7 @@ const getShipList = async () => {
   if (res.code != 200) return;
 
   store.commit('setShipArr', res.data);
-  shipType.value = res.data.length == 0 ? 0 : res.data.length > 0 && res.data.length < 10 ? 1 : 2;
+  shipType.value = res.data.length == 0 ? 0 : res.data.length > 0 && res.data.length <= 3 ? 1 : 2;
 };
 
 const companyInfo = computed(() => store.state.companyInfo);
