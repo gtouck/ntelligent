@@ -119,7 +119,7 @@ const typeArr = [
     id: 2,
   },
   {
-    name: '散点图模式',
+    name: '折线图模式',
     id: 3,
   },
 ];
@@ -134,6 +134,8 @@ const shipArr = ref([
 ]);
 
 let option;
+let scatterOption;
+let scatterChart;
 
 onMounted(() => {
   getData();
@@ -142,9 +144,24 @@ onMounted(() => {
 watch(
   selectId,
   newValue => {
-    // if (newValue == 2) {
-    //   initBar();
-    // }
+    // 重置图表状态
+    if (scatterChart) {
+      scatterChart.dispose();
+      scatterChart = null;
+    }
+    getData();
+  },
+  { flush: 'post' },
+);
+
+watch(
+  selectAttr,
+  () => {
+    // 重置图表状态
+    if (scatterChart) {
+      scatterChart.dispose();
+      scatterChart = null;
+    }
     getData();
   },
   { flush: 'post' },
@@ -152,6 +169,7 @@ watch(
 
 const getData = () => {
   initOption(); //初始化option
+  initScatterOption(); //初始化散点图option
   shipArr.value.forEach(async (e, index) => {
     if (new Date(e.startDate).getTime() > new Date(e.endDate).getTime()) {
       ElMessage.error('开始时间不能大于结束时间');
@@ -184,7 +202,7 @@ const getData = () => {
         //散点图
         res = await apis.attributeValues(param);
 
-        initScatter(res.data);
+        initScatter(res.data, data.value.filter(v => v.id == e.ship)[0].name);
         break;
 
       default:
@@ -239,42 +257,34 @@ const initOption = () => {
   };
 };
 
-const initScatter = data => {
-  data = data.map(e => [e.date, e.value]);
-  const chartDom = document.getElementById('scatterBox');
-  const myChart = echarts.init(chartDom);
-  let option;
-  option = {
-    dataset: [
-      {
-        source: data,
-      },
-      // {
-      //   transform: {
-      //     type: 'ecStat:regression',
-      //     fromDatasetIndex: 0,
-      //     print: true,
-      //     config: {
-      //       method: 'exponential',
-      //       // 'end' by default
-      //       // formulaOn: 'start'
-      //     },
-      //   },
-      // },
-    ],
+const initScatterOption = () => {
+  scatterOption = {
     title: {},
+    color: ['#1a88ee', '#20c563', '#ff7c7c', '#9c27b0', '#ff9800', '#4caf50'],
     tooltip: {
-      trigger: 'axis',
+      trigger: 'item',
       axisPointer: {
         type: 'cross',
       },
       formatter: function (params) {
-        const date = new Date(params[0].value[0]);
+        const date = new Date(params.value[0]);
         const formattedDate = date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-        return formattedDate + '<br/>' + selectAttrName.value + ': ' + params[0].value[1];
+        return (
+          params.seriesName +
+          '<br/>' +
+          formattedDate +
+          '<br/>' +
+          selectAttrName.value +
+          ': ' +
+          params.value[1]
+        );
       },
     },
-
+    legend: {
+      data: [],
+      right: 20,
+      orient: 'vertical',
+    },
     xAxis: {
       type: 'time',
       name: '日期',
@@ -300,7 +310,6 @@ const initScatter = data => {
       name: selectAttrName.value + '(km/nmile)',
       nameLocation: 'middle',
       nameGap: 30,
-
       nameTextStyle: {
         fontSize: 15,
       },
@@ -310,20 +319,30 @@ const initScatter = data => {
         },
       },
     },
-    series: [
-      {
-        type: 'scatter',
-        symbolSize: 5,
-        datasetIndex: 0,
-        itemStyle: {
-          color: '#1a88ee',
-        },
-        data: data,
-      },
-    ],
+    series: [],
+  };
+};
+
+const initScatter = (data, name) => {
+  data = data.map(e => [e.date, e.value]);
+  const chartDom = document.getElementById('scatterBox');
+
+  if (!scatterChart) {
+    scatterChart = echarts.init(chartDom);
+  }
+
+  scatterOption.legend.data.push(name);
+  scatterOption.yAxis.name = selectAttrName.value + '(km/nmile)';
+
+  const seriesObj = {
+    name: name,
+    type: 'line',
+    symbolSize: 5,
+    data: data,
   };
 
-  option && myChart.setOption(option);
+  scatterOption.series.push(seriesObj);
+  scatterChart.setOption(scatterOption);
 };
 
 const initBar = (data, name) => {
