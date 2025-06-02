@@ -41,6 +41,7 @@
               :class="{ active_head: item.id == selectShip }"
               @click="selectShip = item.id">
               <img
+                style="font-size: 19px; color: #d4d4d4; margin-left: 35px"
                 v-if="item.id == selectShip"
                 src="@/assets/whiteShip.png" />
               <img

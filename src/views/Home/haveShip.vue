@@ -58,7 +58,11 @@
         <div class="item_head flex-row align-center justify-between">
           <div class="head_left flex-row align-center">
             <img src="@/assets/shipIcon.png" />
-            <span>{{ item.name }}</span>
+            <span
+              style="cursor: pointer"
+              @click="toggleCiiChart(item.id)">
+              {{ item.name }}
+            </span>
           </div>
           <div class="head_right">
             <el-button @click="viewHistory(item)">
@@ -96,6 +100,21 @@
           </div>
         </div>
         <ItemContent :item="item" />
+
+        <!-- CII走势图区域 -->
+        <div
+          v-if="expandedShips.includes(item.id)"
+          class="littleShip">
+          <div class="item_btm flex-row align-center justify-between">
+            <div class="btm_left flex-row align-center">
+              <img src="@/assets/cii.png" />
+              <span>CII走势图</span>
+            </div>
+          </div>
+          <div
+            :id="`chartBox_${item.id}`"
+            style="height: 400px"></div>
+        </div>
       </div>
 
       <div class="pagination_bx flex-row align-center justify-end">
@@ -130,7 +149,7 @@
     <AddDialog
       ref="RefAddDialog"
       :edit-data="editData"
-      :getShipList="getShipList" />
+      :get-ship-list="getShipList" />
     <HistoryDialog
       ref="RefHistoryDialog"
       :ship-id="currentShipId" />
@@ -143,7 +162,7 @@
 </template>
 
 <script setup>
-import { ref, computed, defineProps, watch } from 'vue';
+import { ref, computed, defineProps, watch, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
@@ -151,10 +170,12 @@ import UploadDialog from './uploadDialog';
 import AddDialog from './addDialog.vue';
 import HistoryDialog from './historyDialog';
 import ItemContent from './itemContent';
+import littleShip from './littleShip.vue';
 import { useAddDialog, useUploadDialog, useHistoryDialog } from '@/hooks/useCommon.js';
 import * as apis from '@/fetch/apis.js';
 import { ElMessage } from 'element-plus';
 import MessageBox from '@/components/MessageBox';
+import tools from '@/utils/tools';
 
 const store = useStore();
 const router = useRouter();
@@ -164,6 +185,7 @@ const search = ref('');
 const currentPage = ref(1);
 const inputPage = ref('');
 const total = ref(100);
+const expandedShips = ref([]); // 用于跟踪展开CII图表的船舶ID
 
 // 弹出框相关
 const RefAddDialog = ref(null);
@@ -280,6 +302,51 @@ const delSure = async () => {
 const viewHistory = item => {
   currentShipId.value = item.id;
   historyOpen();
+};
+
+// 切换CII图表显示
+const toggleCiiChart = async shipId => {
+  const index = expandedShips.value.indexOf(shipId);
+  if (index > -1) {
+    // 如果已经展开，则收起
+    expandedShips.value.splice(index, 1);
+  } else {
+    // 如果未展开，则展开并加载数据
+    expandedShips.value.push(shipId);
+    await nextTick(); // 等待DOM更新
+    await loadCiiData(shipId);
+  }
+};
+
+// 获取并渲染CII数据
+const loadCiiData = async shipId => {
+  try {
+    const param = {
+      vessel_id: shipId,
+    };
+    const res = await apis.shipCii(param);
+    if (res.code === 200) {
+      // 临时修改chartBox的ID以适配当前船舶
+      const originalChartBox = document.getElementById('chartBox');
+      const currentChartBox = document.getElementById(`chartBox_${shipId}`);
+
+      if (currentChartBox) {
+        // 临时设置ID为chartBox以供tools.initCii使用
+        currentChartBox.id = 'chartBox';
+        tools.initCii(res.data);
+        // 恢复原ID
+        currentChartBox.id = `chartBox_${shipId}`;
+      }
+
+      // 恢复原始chartBox的ID（如果存在）
+      if (originalChartBox) {
+        originalChartBox.id = 'chartBox';
+      }
+    }
+  } catch (error) {
+    console.error('加载CII数据失败:', error);
+    ElMessage.error('加载CII数据失败');
+  }
 };
 
 const data = computed(() => store.state.shipArr);

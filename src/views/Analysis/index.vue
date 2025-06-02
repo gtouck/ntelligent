@@ -335,6 +335,7 @@ const initScatter = (data, name) => {
   if (!scatterChart) {
     scatterChart = echarts.init(chartDom);
   }
+  scatterChart.clear();
 
   scatterOption.legend.data.push(name);
   scatterOption.yAxis.name = selectAttrName.value + '(km/nmile)';
