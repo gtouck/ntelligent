@@ -7,6 +7,7 @@
           <span>{{ data.length }}</span>
           条船舶信息
         </p>
+
         <!-- <div
           class="flex-row align-center justify-center"
           @click="ascend = !ascend">
@@ -58,13 +59,19 @@
         <div class="item_head flex-row align-center justify-between">
           <div class="head_left flex-row align-center">
             <img src="@/assets/shipIcon.png" />
-            <span
-              style="cursor: pointer"
-              @click="toggleCiiChart(item.id)">
+            <span style="cursor: pointer">
               {{ item.name }}
             </span>
           </div>
           <div class="head_right">
+            <el-button @click="toggleCiiChart(item.id)">
+              <template #icon>
+                <img
+                  class="upload"
+                  src="@/assets/cii.png" />
+              </template>
+              查看CII走势图
+            </el-button>
             <el-button @click="viewHistory(item)">
               <template #icon>
                 <img
