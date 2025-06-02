@@ -16,7 +16,7 @@
           v-for="(item, index) in shipArr"
           :key="index"
           class="ship_box flex-row align-center">
-          <p>船舶{{ index + 1 }}</p>
+          <p>选项{{ index + 1 }}</p>
           <el-select v-model="item.ship">
             <el-option
               v-for="v in data"
@@ -45,17 +45,17 @@
             show-stops
             :max="20"
             :min="-20" />
-          <!-- <img
+          <img
             class="close"
             src="@/assets/close.png"
-            @click="delShip(index)" /> -->
+            @click="delShip(index)" />
         </div>
       </div>
 
-      <!-- <img
+      <img
         src="@/assets/addIcon.png"
         class="addIcon"
-        @click="addShip" /> -->
+        @click="addShip" />
 
       <el-button
         class="btn_color search_btn"
@@ -98,6 +98,8 @@ const store = useStore();
 const { attributeMappingArr } = useAttributesMap();
 
 const selectMapping = ref(attributeMappingArr[0].value);
+let option; // 图表配置
+const colors = ['#1a88ee', '#20c563', '#ff7c7c', '#9c27b0', '#ff9800', '#4caf50'];
 
 const shipArr = ref([
   {
@@ -116,17 +118,29 @@ const getData = async () => {
   if (!selectMapping.value) {
     return ElMessage.error('请选择属性组合');
   }
-  if (!shipArr.value[0].ship) {
-    return ElMessage.error('请选择船舶');
-  }
 
-  if (
-    new Date(shipArr.value[0].startDate).getTime() > new Date(shipArr.value[0].endDate).getTime()
-  ) {
-    ElMessage.error('开始时间不能大于结束时间');
-    return;
-  }
-  shipArr.value.forEach(async ship => {
+  // 清空并重新初始化图表配置
+  const chartDom = document.getElementById('myBar');
+  const myChart = echarts.init(chartDom);
+  myChart.clear(); // 清空之前的配置
+
+  // 初始化图表配置
+  initOption();
+
+  // 遍历所有选项
+  for (let index = 0; index < shipArr.value.length; index++) {
+    const ship = shipArr.value[index];
+
+    if (!ship.ship) {
+      ElMessage.error(`请选择选项${index + 1}的船舶`);
+      return;
+    }
+
+    if (new Date(ship.startDate).getTime() > new Date(ship.endDate).getTime()) {
+      ElMessage.error(`选项${index + 1}的开始时间不能大于结束时间`);
+      return;
+    }
+
     const param = {
       attribute_name1: selectMapping.value.split('-')[0],
       attribute_name2: selectMapping.value.split('-')[1],
@@ -136,32 +150,22 @@ const getData = async () => {
       min_slip_ratio: ship.slipRatio[0],
       max_slip_ratio: ship.slipRatio[1],
     };
+
     let res = await apis.attributeRelation(param);
-    if (res.code != 200) return;
-    initEchart(res.data);
-  });
+    if (res.code != 200) continue;
+
+    const shipName = data.value.filter(v => v.id == ship.ship)[0]?.name || '';
+    const seriesName = `选项${index + 1}-${shipName}`;
+
+    addDataSeries(res.data, seriesName, index);
+  }
+
+  // 应用最终配置
+  myChart.setOption(option);
 };
 
-const initEchart = data => {
-  data = data.map(e => [e.value1, e.value2]);
-
-  const chartDom = document.getElementById('myBar');
-  const myChart = echarts.init(chartDom);
-  let option;
+const initOption = () => {
   const nameArr = selectMapName.value.split('-');
-  /**
-   * myRegression的属性有points和parameter,expression
-   * 下面给出其jsdoc
-   * @typedef {Object} myRegression
-   * @property {Array} points - 回归后的数据点
-   * @property {Array} parameter - 回归参数
-   * @property {string} expression - 回归方程
-   */
-  const myRegression = ecStat.regression('polynomial', data, 2);
-
-  const r2 = calculateR2(myRegression.parameter, data);
-
-  // echarts.registerTransform(ecStat.transform.regression);
   option = {
     title: {},
     tooltip: {
@@ -170,7 +174,11 @@ const initEchart = data => {
         type: 'cross',
       },
     },
-
+    legend: {
+      data: [],
+      right: 20,
+      orient: 'vertical',
+    },
     xAxis: {
       name: nameArr[0],
       nameLocation: 'middle',
@@ -200,60 +208,98 @@ const initEchart = data => {
         },
       },
     },
-    series: [
-      {
-        type: 'scatter',
-        datasetIndex: 0,
-        itemStyle: {
-          color: '#1a88ee',
-        },
-        data: data,
-      },
-      {
-        type: 'line',
-        smooth: false,
-        datasetIndex: 1,
-        symbolSize: 0.1,
-        symbol: 'circle',
-        lineStyle: {
-          color: '#1a88ee',
-        },
-        data: myRegression.points,
-      },
-    ],
-    // 添加自定义图形元素用于显示公式
-    graphic: [
-      {
-        type: 'text',
-        z: 100,
-        left: 'center',
-        top: '5%',
-        style: {
-          text: '回归方程: ' + myRegression.expression + '\nR²: ' + r2.toFixed(4),
-          fontSize: 18,
-          fontFamily: 'Arial',
-          fontWeight: 'normal',
-          fill: '#1a88ee',
-          // backgroundColor: 'rgba(255,255,255,0.7)',
-          padding: [8, 12],
-          borderRadius: 4,
-          lineHeight: 24,
-        },
-      },
-    ],
+    series: [],
+    graphic: [],
   };
+};
 
-  option && myChart.setOption(option);
+const addDataSeries = (data, seriesName, index) => {
+  const processedData = data.map(e => [e.value1, e.value2]);
+  const color = colors[index % colors.length];
+
+  // 计算回归线
+  const myRegression = ecStat.regression('polynomial', processedData, 2);
+  const r2 = calculateR2(myRegression.parameter, processedData);
+
+  // 添加图例
+  option.legend.data.push(seriesName);
+
+  // 添加散点图系列
+  option.series.push({
+    name: seriesName,
+    type: 'scatter',
+    itemStyle: {
+      color: color,
+    },
+    data: processedData,
+  });
+
+  // 添加回归线系列
+  option.series.push({
+    name: `${seriesName}-回归线`,
+    type: 'line',
+    smooth: false,
+    symbolSize: 0.1,
+    symbol: 'circle',
+    lineStyle: {
+      color: color,
+      type: 'dashed',
+    },
+    data: myRegression.points,
+    showInLegend: false,
+  });
+
+  // 添加回归方程显示 - 优化布局以避免重叠
+  const totalOptions = shipArr.value.length;
+  let left, top;
+
+  // 根据选项数量动态调整位置
+  if (totalOptions <= 3) {
+    // 3个或更少时垂直排列在左侧
+    left = 'left';
+    top = 5 + index * 10 + '%';
+  } else {
+    // 超过3个时分两列排列
+    const column = Math.floor(index / 3);
+    const row = index % 3;
+    left = column === 0 ? 'left' : 'center';
+    top = 5 + row * 10 + '%';
+  }
+
+  option.graphic.push({
+    type: 'text',
+    z: 100,
+    left: left,
+    top: top,
+    style: {
+      text: `${seriesName}: ${myRegression.expression}, R²: ${r2.toFixed(4)}`,
+      fontSize: totalOptions > 4 ? 12 : 14, // 选项多时减小字体
+      fontFamily: 'Arial',
+      fontWeight: 'normal',
+      fill: color,
+      backgroundColor: 'rgba(255,255,255,0.8)',
+      padding: [3, 6],
+      borderRadius: 3,
+      shadowColor: 'rgba(0,0,0,0.1)',
+      shadowBlur: 2,
+    },
+  });
 };
 
 const delShip = index => {
+  if (shipArr.value.length <= 1) {
+    ElMessage.warning('至少需要保留一个选项');
+    return;
+  }
   shipArr.value.splice(index, 1);
 };
 
 const addShip = () => {
   shipArr.value.push({
-    ...shipArr.value[0],
     ship: '',
+    startDate: '2023-01-01',
+    endDate: '2023-01-31',
+    slipRatio: [-20, 20],
   });
 };
 

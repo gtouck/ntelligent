@@ -23,7 +23,7 @@
           v-for="(item, index) in shipArr"
           :key="index"
           class="ship_box flex-row align-center">
-          <p>船舶{{ index + 1 }}</p>
+          <p>选项{{ index + 1 }}</p>
           <el-select v-model="item.ship">
             <el-option
               v-for="v in data"
@@ -33,8 +33,8 @@
           </el-select>
           <p class="lebal_text1">时间期间</p>
           <el-date-picker
-            clearable="false"
             v-model="item.startDate"
+            clearable="false"
             value-format="YYYY-MM-DD"
             type="date"
             placeholder="请选择"
@@ -97,6 +97,7 @@ const store = useStore();
 const { fuelTypeCategoryArr } = useFuelTypeCategory();
 const fuelType = ref('hfo'); // 油品种类
 const energyType = ref('总油耗'); //能耗类型
+let option; // 图表配置选项
 const shipArr = ref([
   {
     ship: store.state.selectShip || 1,
@@ -110,50 +111,65 @@ onMounted(() => {
 });
 
 const getData = async () => {
-  if (
-    new Date(shipArr.value[0].startDate).getTime() > new Date(shipArr.value[0].endDate).getTime()
-  ) {
-    ElMessage.error('开始时间不能大于结束时间');
-    return;
-  }
-  let param = {
-    fuel_type: fuelType.value,
-    vessel_id: shipArr.value[0].ship,
-    start_date: shipArr.value[0].startDate,
-    end_date: shipArr.value[0].endDate,
-  };
+  // 初始化图表配置
+  initOption();
 
-  let res =
-    energyType.value == '总油耗'
-      ? await apis.consumptionTotal(param)
-      : await apis.consumptionNmile(param);
-  if (res.code != 200) return;
-  initBar(res.data);
-  //全船：total,主机：me,副机：dg,锅炉：blr
+  // 遍历所有选项
+  for (let index = 0; index < shipArr.value.length; index++) {
+    const item = shipArr.value[index];
+
+    if (new Date(item.startDate).getTime() > new Date(item.endDate).getTime()) {
+      ElMessage.error('开始时间不能大于结束时间');
+      return;
+    }
+
+    if (!item.ship) {
+      ElMessage.error('请选择船舶');
+      return;
+    }
+
+    let param = {
+      fuel_type: fuelType.value,
+      vessel_id: item.ship,
+      start_date: item.startDate,
+      end_date: item.endDate,
+    };
+
+    let res =
+      energyType.value == '总油耗'
+        ? await apis.consumptionTotal(param)
+        : await apis.consumptionNmile(param);
+
+    if (res.code != 200) continue;
+
+    const shipName = data.value.filter(v => v.id == item.ship)[0]?.name || '';
+    const seriesName = `选项${index + 1}-${shipName}`;
+
+    initBar(res.data, seriesName, index);
+  }
 };
 
-const initBar = data => {
-  const { total, me, dg, blr } = data;
-  const myChart = echarts.init(document.getElementById('myBar'));
-  const unitName = energyType.value === '总油耗' ? '吨' : 'kg/nmile';
-
-  const option = {
+const initOption = () => {
+  option = {
     grid: {
-      bottom: 40, // 确保底部有足够空间显示 x 轴
-      left: 100, // 确保左侧有足够空间显示 y 轴
+      bottom: 40,
+      left: 100,
     },
     title: {},
-    color: ['#1a88ee', '#20c563'],
+    color: ['#1a88ee', '#20c563', '#ff7c7c', '#9c27b0', '#ff9800', '#4caf50'],
     tooltip: {
       trigger: 'axis',
       formatter: function (params) {
-        // params[0] 是第一个系列的数据
-        const value = params[0].value;
-        // 只有当值大于0时才显示提示框
-        return value > 0 ? `${params[0].name}: ${value}` : '';
+        let result = '';
+        params.forEach(param => {
+          const value = param.value;
+          if (value > 0) {
+            result += `${param.seriesName}: ${value}<br/>`;
+          }
+        });
+        return result || '';
       },
     },
-
     legend: {
       data: [],
       right: 20,
@@ -162,7 +178,7 @@ const initBar = data => {
     xAxis: [
       {
         data: ['全船', '主机', '副机', '锅炉'],
-        position: 'bottom', // x 轴位置固定在底部
+        position: 'bottom',
         axisTick: {
           show: false,
         },
@@ -178,7 +194,7 @@ const initBar = data => {
         axisLabel: {
           formatter: '{value}',
         },
-        name: `${energyType.value}(${unitName})`,
+        name: '',
         nameLocation: 'middle',
         nameRotate: '90',
         nameTextStyle: {
@@ -187,32 +203,52 @@ const initBar = data => {
         nameGap: 70,
       },
     ],
-    series: [
-      {
-        type: 'bar',
-        data: [returnToFixed(total), returnToFixed(me), returnToFixed(dg), returnToFixed(blr)].map(
-          value => ({
-            value: value >= 0 ? value : 0, // 负数时值设为 -1，不显示柱子
-            itemStyle: {
-              color: value >= 0 ? '#1a88ee' : 'rgba(0,0,0,0)',
-            },
-            label: {
-              show: true,
-              position: 'top', // 统一设置在顶部显示
-              formatter: value >= 0 ? '{c}' : '数据异常\n消耗量为负值\n需检查',
-              color: value >= 0 ? '#000' : '#1a88ee',
-              fontSize: value >= 0 ? 12 : 14,
-              distance: value >= 0 ? 5 : 5,
-              align: 'center',
-              verticalAlign: 'bottom',
-            },
-          }),
-        ),
-        barWidth: '20%',
-      },
-    ],
+    series: [],
+  };
+};
+
+const initBar = (data, seriesName, index) => {
+  const { total, me, dg, blr } = data;
+  const myChart = echarts.init(document.getElementById('myBar'));
+  const unitName = energyType.value === '总油耗' ? '吨' : 'kg/nmile';
+
+  // 更新Y轴名称
+  option.yAxis[0].name = `${energyType.value}(${unitName})`;
+
+  // 添加图例
+  option.legend.data.push(seriesName);
+
+  // 创建系列数据
+  const seriesData = [
+    returnToFixed(total),
+    returnToFixed(me),
+    returnToFixed(dg),
+    returnToFixed(blr),
+  ].map(value => ({
+    value: value >= 0 ? value : 0,
+    itemStyle: {
+      color: value >= 0 ? option.color[index % option.color.length] : 'rgba(0,0,0,0)',
+    },
+    label: {
+      show: true,
+      position: 'top',
+      formatter: value >= 0 ? '{c}' : '数据异常\n消耗量为负值\n需检查',
+      color: value >= 0 ? '#000' : option.color[index % option.color.length],
+      fontSize: value >= 0 ? 12 : 14,
+      distance: value >= 0 ? 5 : 5,
+      align: 'center',
+      verticalAlign: 'bottom',
+    },
+  }));
+
+  const seriesObj = {
+    name: seriesName,
+    type: 'bar',
+    data: seriesData,
+    barWidth: '20%',
   };
 
+  option.series.push(seriesObj);
   myChart.setOption(option);
 };
 
@@ -221,11 +257,19 @@ const returnToFixed = num => {
 };
 
 const delShip = index => {
+  if (shipArr.value.length <= 1) {
+    ElMessage.warning('至少需要保留一个选项');
+    return;
+  }
   shipArr.value.splice(index, 1);
 };
 
 const addShip = () => {
-  shipArr.value.push({ ship: '', startDate: '', endDate: '' });
+  shipArr.value.push({
+    ship: '',
+    startDate: '2023-01-01',
+    endDate: '2023-01-31',
+  });
 };
 
 const fuelName = computed(() => {

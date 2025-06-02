@@ -16,7 +16,7 @@
           v-for="(item, index) in shipArr"
           :key="index"
           class="ship_box flex-row align-center">
-          <p>船舶{{ index + 1 }}</p>
+          <p>选项{{ index + 1 }}</p>
           <el-select v-model="item.ship">
             <el-option
               v-for="v in data"
@@ -195,14 +195,19 @@ const getData = () => {
       case 2:
         //直方图
         res = await apis.attributeFrequencies(param);
-
-        initBar(res.data, data.value.filter(v => v.id == e.ship)[0].name);
+        initBar(
+          res.data,
+          '选项' + (index + 1) + '-' + data.value.filter(v => v.id == e.ship)[0].name,
+        );
         break;
       case 3:
         //散点图
         res = await apis.attributeValues(param);
 
-        initScatter(res.data, data.value.filter(v => v.id == e.ship)[0].name);
+        initScatter(
+          res.data,
+          '选项' + (index + 1) + '-' + data.value.filter(v => v.id == e.ship)[0].name,
+        );
         break;
 
       default:
@@ -214,7 +219,7 @@ const getData = () => {
 const initOption = () => {
   option = {
     title: {},
-    color: ['#1a88ee', '#20c563'],
+    color: ['#1a88ee', '#20c563', '#ff7c7c', '#9c27b0', '#ff9800', '#4caf50'],
     tooltip: {
       trigger: 'axis',
     },

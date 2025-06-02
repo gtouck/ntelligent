@@ -64,7 +64,7 @@
             <div class="flex-row align-center justify-center btn_color">
               <img src="@/assets/dateIcon.png" />
             </div>
-            <span>不同对水航速下参考期与评估期所需主机功率对比</span>
+            <span>最近三个月基于速度损失率的船体及螺旋桨状态评估</span>
           </div>
         </div>
         <div id="chart5"></div>
